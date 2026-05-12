@@ -78,31 +78,18 @@ function PageHeader() {
 }
 
 const DESKTOP_COLS = "1fr 200px 1.5fr 200px 100px 100px";
-const MOBILE_COLS = "1fr 1fr 80px 80px";
 
 function CarriersTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-white border-b border-gray-200 px-5 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1000px]"
+        className="grid bg-white border-b border-gray-200 px-5 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1000px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span>Nosaukums</span>
         <span>Reģ. nr.</span>
         <span>Adrese</span>
         <span className="pr-6">Kontakti</span>
-        <span>Aktīvs</span>
-        <span>Darbības</span>
-      </div>
-
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>Nosaukums</span>
-        <span>Adrese</span>
         <span>Aktīvs</span>
         <span>Darbības</span>
       </div>
@@ -116,61 +103,43 @@ function CarriersTable() {
 
 function CarrierRow({ row }: { row: Carrier }) {
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop */}
-      <div
-        className="hidden md:grid px-5 py-5 items-center text-[14px] text-gray-900 min-w-[1000px]"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
-      >
-        <div className="text-[14px] font-semibold text-gray-900 truncate pr-3">
-          {row.name}
-        </div>
-        <div
-          className="text-[13px] text-gray-600 tabular-nums truncate pr-3"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.regNo}
-        </div>
-        <div className="text-[13px] text-gray-700 truncate pr-3">
-          {row.address}
-        </div>
-        <div className="text-[13px] text-gray-700 pr-6">{row.contact}</div>
-        <div className="text-[13px] text-gray-700">{row.active}</div>
-        <RowActions />
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-5 py-5 items-center text-[14px] text-gray-900 min-w-[1000px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
+      <div className="text-[14px] font-semibold text-gray-900 truncate pr-3">
+        {row.name}
       </div>
-
-      {/* Mobile */}
       <div
-        className="md:hidden grid px-3 py-4 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
+        className="text-[13px] text-gray-600 tabular-nums truncate pr-3"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <div className="text-[13px] font-semibold text-gray-900 truncate">
-          {row.name}
-        </div>
-        <div className="text-[12px] text-gray-700 truncate">{row.address}</div>
-        <div className="text-[12px] text-gray-700">{row.active}</div>
-        <RowActions compact />
+        {row.regNo}
       </div>
+      <div className="text-[13px] text-gray-700 truncate pr-3">
+        {row.address}
+      </div>
+      <div className="text-[13px] text-gray-700 pr-6">{row.contact}</div>
+      <div className="text-[13px] text-gray-700">{row.active}</div>
+      <RowActions />
     </div>
   );
 }
 
-function RowActions({ compact = false }: { compact?: boolean }) {
-  const size = compact ? "h-7 w-7" : "h-8 w-8";
-  const iconSize = compact ? "w-3.5 h-3.5" : "w-4 h-4";
+function RowActions() {
   return (
     <div className="flex items-center gap-1">
       <button
         aria-label="Labot"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500"
       >
-        <Edit2 className={iconSize} />
+        <Edit2 className="w-4 h-4" />
       </button>
       <button
         aria-label="Dzēst"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500"
       >
-        <Trash2 className={iconSize} />
+        <Trash2 className="w-4 h-4" />
       </button>
     </div>
   );

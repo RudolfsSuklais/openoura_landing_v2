@@ -134,14 +134,12 @@ function PageHeader() {
 }
 
 const DESKTOP_COLS = "180px 180px 1fr 1fr 100px 100px";
-const MOBILE_COLS = "1fr 1fr 70px 70px";
 
 function VehiclesTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-white border-b border-gray-200 px-5 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1000px]"
+        className="grid bg-white border-b border-gray-200 px-5 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1000px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span>Vilcēja nr.</span>
@@ -150,17 +148,6 @@ function VehiclesTable() {
         <span>Piezīmes</span>
         <span>Aktīvs</span>
         <span>Darbības</span>
-      </div>
-
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>Vilcējs</span>
-        <span>Piekabe</span>
-        <span>Aktīvs</span>
-        <span>Darb.</span>
       </div>
 
       {ROWS.map((row, i) => (
@@ -173,94 +160,60 @@ function VehiclesTable() {
 function VehicleRow({ row }: { row: Vehicle }) {
   const noTrailer = row.trailerPlate === "—";
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop */}
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-5 py-4 items-center text-[14px] text-gray-900 min-w-[1000px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
       <div
-        className="hidden md:grid px-5 py-4 items-center text-[14px] text-gray-900 min-w-[1000px]"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
+        className="text-[14px] font-semibold text-gray-900 tabular-nums tracking-wide"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <div
-          className="text-[14px] font-semibold text-gray-900 tabular-nums tracking-wide"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.truckPlate}
-        </div>
-        <div
-          className={`text-[14px] tabular-nums tracking-wide ${
-            noTrailer ? "text-gray-400 font-normal" : "text-gray-700 font-medium"
-          }`}
-          style={{ fontFamily: noTrailer ? undefined : MONO_STACK }}
-        >
-          {row.trailerPlate}
-        </div>
-        <div className="text-[13px] text-gray-700 truncate pr-3">
-          {row.carrier}
-        </div>
-        <div
-          className={`text-[13px] truncate pr-3 ${
-            row.notes === "—" ? "text-gray-400 not-italic" : "text-gray-500 italic"
-          }`}
-        >
-          {row.notes}
-        </div>
-        <div
-          className={`text-[13px] ${
-            row.active ? "text-gray-700" : "text-gray-400"
-          }`}
-        >
-          {row.active ? "Jā" : "Nē"}
-        </div>
-        <RowActions />
+        {row.truckPlate}
       </div>
-
-      {/* Mobile */}
       <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
+        className={`text-[14px] tabular-nums tracking-wide ${
+          noTrailer ? "text-gray-400 font-normal" : "text-gray-700 font-medium"
+        }`}
+        style={{ fontFamily: noTrailer ? undefined : MONO_STACK }}
       >
-        <div
-          className="text-[13px] font-semibold text-gray-900 tabular-nums truncate"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.truckPlate}
-        </div>
-        <div
-          className={`text-[12px] tabular-nums truncate ${
-            noTrailer ? "text-gray-400" : "text-gray-700 font-medium"
-          }`}
-          style={{ fontFamily: noTrailer ? undefined : MONO_STACK }}
-        >
-          {row.trailerPlate}
-        </div>
-        <div
-          className={`text-[12px] ${
-            row.active ? "text-gray-700" : "text-gray-400"
-          }`}
-        >
-          {row.active ? "Jā" : "Nē"}
-        </div>
-        <RowActions compact />
+        {row.trailerPlate}
       </div>
+      <div className="text-[13px] text-gray-700 truncate pr-3">
+        {row.carrier}
+      </div>
+      <div
+        className={`text-[13px] truncate pr-3 ${
+          row.notes === "—" ? "text-gray-400 not-italic" : "text-gray-500 italic"
+        }`}
+      >
+        {row.notes}
+      </div>
+      <div
+        className={`text-[13px] ${
+          row.active ? "text-gray-700" : "text-gray-400"
+        }`}
+      >
+        {row.active ? "Jā" : "Nē"}
+      </div>
+      <RowActions />
     </div>
   );
 }
 
-function RowActions({ compact = false }: { compact?: boolean }) {
-  const size = compact ? "h-7 w-7" : "h-8 w-8";
-  const iconSize = compact ? "w-3.5 h-3.5" : "w-4 h-4";
+function RowActions() {
   return (
     <div className="flex items-center gap-1">
       <button
         aria-label="Labot"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500"
       >
-        <Edit2 className={iconSize} />
+        <Edit2 className="w-4 h-4" />
       </button>
       <button
         aria-label="Dzēst"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500"
       >
-        <Trash2 className={iconSize} />
+        <Trash2 className="w-4 h-4" />
       </button>
     </div>
   );

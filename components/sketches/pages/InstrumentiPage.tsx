@@ -177,7 +177,6 @@ const ROWS: ToolRow[] = [
 
 const DESKTOP_COLS =
   "minmax(160px,1fr) 110px 100px 100px 100px 140px 100px 100px 70px";
-const MOBILE_COLS = "minmax(120px,1fr) 100px 100px 60px";
 
 export function InstrumentiPage() {
   return (
@@ -314,9 +313,9 @@ function FilterBtn({ label }: { label: string }) {
    ────────────────────────────────────────────────────────── */
 function ToolsTable() {
   return (
-    <div className="border-t border-gray-200">
+    <div className="border-t border-gray-200 overflow-x-auto">
       <div
-        className="hidden xl:grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500 gap-x-3"
+        className="grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500 gap-x-3 min-w-[1100px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span>Nosaukums</span>
@@ -330,16 +329,6 @@ function ToolsTable() {
         <span className="text-right">Darbības</span>
       </div>
 
-      <div
-        className="xl:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-wider text-gray-500 gap-x-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>Nosaukums</span>
-        <span>Īpašums</span>
-        <span>Statuss</span>
-        <span className="text-right">Darb.</span>
-      </div>
-
       {ROWS.map((row) => (
         <ToolTableRow key={row.internalSku} row={row} />
       ))}
@@ -349,45 +338,25 @@ function ToolsTable() {
 
 function ToolTableRow({ row }: { row: ToolRow }) {
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop (xl+) */}
-      <div
-        className="hidden xl:grid px-4 py-4 items-center text-[14px] text-gray-700 gap-x-3 min-w-0"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
-      >
-        <NameCell row={row} />
-        <MonoCell value={row.sku} />
-        <MonoCell value={row.internalSku} />
-        <MonoCell value={row.engraved} />
-        <div className="min-w-0">
-          <OwnershipPill ownership={row.ownership} />
-        </div>
-        <ResponsibleCell row={row} />
-        <div className="min-w-0">
-          <StatusPill status={row.status} />
-        </div>
-        <RentalEndCell value={row.rentalEnd} />
-        <div className="flex items-center justify-end gap-1">
-          <IconBtn Icon={Edit2} />
-          <IconBtn Icon={Trash2} />
-        </div>
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-700 gap-x-3 min-w-[1100px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
+      <NameCell row={row} />
+      <MonoCell value={row.sku} />
+      <MonoCell value={row.internalSku} />
+      <MonoCell value={row.engraved} />
+      <div className="min-w-0">
+        <OwnershipPill ownership={row.ownership} />
       </div>
-
-      {/* Mobile / tablet (<xl) */}
-      <div
-        className="xl:hidden grid px-3 py-3 items-center text-[13px] gap-x-2 min-w-0"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <NameCell row={row} compact />
-        <div>
-          <OwnershipPill ownership={row.ownership} />
-        </div>
-        <div>
-          <StatusPill status={row.status} />
-        </div>
-        <div className="flex items-center justify-end gap-0.5">
-          <IconBtn Icon={Edit2} />
-        </div>
+      <ResponsibleCell row={row} />
+      <div className="min-w-0">
+        <StatusPill status={row.status} />
+      </div>
+      <RentalEndCell value={row.rentalEnd} />
+      <div className="flex items-center justify-end gap-1">
+        <IconBtn Icon={Edit2} />
+        <IconBtn Icon={Trash2} />
       </div>
     </div>
   );

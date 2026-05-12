@@ -116,7 +116,7 @@ export function FinalCTA() {
             <FadeUp>
               <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted mb-10 md:mb-12 flex items-center gap-3">
                 <span className="inline-block h-px w-8 bg-ink/40" />
-                Sākums · 06
+                Sākums · 08
               </div>
             </FadeUp>
 
@@ -423,7 +423,7 @@ export function FinalCTA() {
         aria-hidden
         className="pointer-events-none absolute right-[-6vw] top-[8%] mono text-[28vw] leading-none tracking-tightest text-ink/[0.035] select-none"
       >
-        06
+        08
       </div>
     </section>
   );

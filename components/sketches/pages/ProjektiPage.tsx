@@ -176,9 +176,9 @@ function SearchBar() {
 
 function ProjectsTable() {
   return (
-    <div className="border-t border-gray-200">
+    <div className="border-t border-gray-200 overflow-x-auto">
       <div
-        className="hidden md:grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center"
+        className="grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[920px]"
         style={{ gridTemplateColumns: "40px 140px 1fr 200px 1.2fr 80px 120px" }}
       >
         <Checkbox />
@@ -188,17 +188,6 @@ function ProjectsTable() {
         <HeaderCell label="Izpilde" />
         <HeaderCell label="BOM" />
         <HeaderCell label="Darbības" sortable={false} />
-      </div>
-
-      <div
-        className="md:hidden grid bg-gray-50 border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center"
-        style={{ gridTemplateColumns: "32px 90px 1fr 1fr 70px" }}
-      >
-        <Checkbox />
-        <HeaderCell label="Nr." />
-        <HeaderCell label="Nosaukums" />
-        <HeaderCell label="Izpilde" />
-        <HeaderCell label="Darb." sortable={false} />
       </div>
 
       {ROWS.map((row, i) => (
@@ -212,47 +201,25 @@ function TableRow({ row, index }: { row: Row; index: number }) {
   return (
     <div
       data-row-index={index}
-      className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-900 min-w-[920px]"
+      style={{ gridTemplateColumns: "40px 140px 1fr 200px 1.2fr 80px 120px" }}
     >
-      <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-900"
-        style={{ gridTemplateColumns: "40px 140px 1fr 200px 1.2fr 80px 120px" }}
-      >
-        <Checkbox />
-        <div>
-          <Tag>{row.tag}</Tag>
-        </div>
-        <div className="font-medium truncate pr-3">{row.name}</div>
-        <div className="text-gray-700 truncate pr-3">{row.client}</div>
-        <div className="pr-3">
-          <ProgressBar pct={row.pct} hours={row.hours} />
-        </div>
-        <div className="flex items-center justify-center">
-          <BomCell type={row.bom} />
-        </div>
-        <div className="flex items-center gap-1">
-          <IconButton Icon={Layers} />
-          <IconButton Icon={Edit2} />
-          <IconButton Icon={Trash2} />
-        </div>
+      <Checkbox />
+      <div>
+        <Tag>{row.tag}</Tag>
       </div>
-
-      <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: "32px 90px 1fr 1fr 70px" }}
-      >
-        <Checkbox />
-        <div>
-          <Tag small>{row.tag}</Tag>
-        </div>
-        <div className="font-medium truncate pr-1">{row.name}</div>
-        <div className="pr-1">
-          <ProgressBar pct={row.pct} hours={row.hours} compact />
-        </div>
-        <div className="flex items-center gap-0.5">
-          <IconButton Icon={Edit2} />
-          <IconButton Icon={Trash2} />
-        </div>
+      <div className="font-medium truncate pr-3">{row.name}</div>
+      <div className="text-gray-700 truncate pr-3">{row.client}</div>
+      <div className="pr-3">
+        <ProgressBar pct={row.pct} hours={row.hours} />
+      </div>
+      <div className="flex items-center justify-center">
+        <BomCell type={row.bom} />
+      </div>
+      <div className="flex items-center gap-1">
+        <IconButton Icon={Layers} />
+        <IconButton Icon={Edit2} />
+        <IconButton Icon={Trash2} />
       </div>
     </div>
   );

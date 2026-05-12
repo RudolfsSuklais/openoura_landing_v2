@@ -44,9 +44,9 @@ export function Solution() {
         {/* ───── H2 ───── */}
         <FadeUp delay={0.05}>
           <h2 className="font-medium leading-[0.9] tracking-[-0.04em] text-ink text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[6.5rem]">
-            <span className="block">Mēs nesam tev ERP.</span>
+            <span className="block">Mēs nepiedāvājam tev ERP.</span>
             <span className="block">
-              Mēs nesam tev{" "}
+              Mēs piedāvājam tev{" "}
               <span className="serif-italic gradient-text">skaidrību</span>.
             </span>
           </h2>
@@ -222,7 +222,7 @@ export function Solution() {
             <ModuleRow
               num="07"
               title="CMR dokumenti"
-              body="Starptautiskās pārvadājumu pavadzīmes (CMR) ģenerēšana no pasūtījuma datiem. Bez manuālas ievades, bez izdrukāšanas no piecām dažādām vietām."
+              body="Eksportē preces uz ES? CMR ir starptautiskās kravas pavadzīme, ko obligāti aizpildīt katram sūtījumam. OpenOura ģenerē tās automātiski no pasūtījuma datiem — bez manuālas ievades, bez izdrukāšanas no piecām dažādām vietām."
               kpi="Eksports PDF · automātiska saglabāšana"
               delay={0.18}
               last

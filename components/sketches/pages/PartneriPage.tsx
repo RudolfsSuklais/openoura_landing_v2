@@ -167,14 +167,11 @@ function SectionHeader() {
 }
 
 const DESKTOP_COLS = "1fr 1fr 200px 140px 200px 100px";
-const MOBILE_COLS = "1fr 100px 140px 80px";
-
 function TasksTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1040px]"
+        className="grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1040px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span>Nosaukums</span>
@@ -182,17 +179,6 @@ function TasksTable() {
         <HeaderInfo label="Prasmes" />
         <HeaderInfo label="Paredzētais laiks" />
         <HeaderInfo label="Vēsture (vid. uz m²)" />
-        <span>Darbības</span>
-      </div>
-
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>Nosaukums</span>
-        <span>Paredz. laiks</span>
-        <span>Vēsture</span>
         <span>Darbības</span>
       </div>
 
@@ -214,43 +200,27 @@ function HeaderInfo({ label }: { label: string }) {
 
 function TaskRow({ task }: { task: Task }) {
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop */}
-      <div
-        className="hidden md:grid px-4 py-4 items-start text-[14px] text-gray-900 min-w-[1040px]"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
-      >
-        <div className="text-[14px] text-gray-900 font-medium pr-3 pt-1">
-          {task.name}
-        </div>
-        <div className="text-[13px] text-gray-400 pr-3 pt-1">
-          {task.description || "—"}
-        </div>
-        <div className="pr-3 pt-1">
-          <SkillPill skill={task.skill} />
-        </div>
-        <div className="pr-3 pt-1">
-          <EstimatedCell estimated={task.estimated} />
-        </div>
-        <div className="pr-3 pt-1">
-          <HistoryCell variance={task.history} />
-        </div>
-        <div className="pt-1">
-          <RowActions />
-        </div>
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-start text-[14px] text-gray-900 min-w-[1040px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
+      <div className="text-[14px] text-gray-900 font-medium pr-3 pt-1">
+        {task.name}
       </div>
-
-      {/* Mobile */}
-      <div
-        className="md:hidden grid px-3 py-4 items-start text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <div className="text-[13px] text-gray-900 font-medium truncate">
-          {task.name}
-        </div>
-        <EstimatedCell estimated={task.estimated} compact />
-        <HistoryCell variance={task.history} compact />
-        <RowActions compact />
+      <div className="text-[13px] text-gray-400 pr-3 pt-1">
+        {task.description || "—"}
+      </div>
+      <div className="pr-3 pt-1">
+        <SkillPill skill={task.skill} />
+      </div>
+      <div className="pr-3 pt-1">
+        <EstimatedCell estimated={task.estimated} />
+      </div>
+      <div className="pr-3 pt-1">
+        <HistoryCell variance={task.history} />
+      </div>
+      <div className="pt-1">
+        <RowActions />
       </div>
     </div>
   );

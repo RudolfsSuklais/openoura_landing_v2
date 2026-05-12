@@ -221,14 +221,12 @@ function DateBox({ placeholder }: { placeholder: string }) {
    ────────────────────────────────────────────────────────── */
 const DESKTOP_GRID =
   "140px 110px 1fr 100px 80px 90px 120px 140px 90px 90px 90px";
-const MOBILE_GRID = "120px 1fr 80px 100px";
 
 function InvoicesTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500 items-center min-w-[1200px]"
+        className="grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500 items-center min-w-[1200px]"
         style={{ gridTemplateColumns: DESKTOP_GRID }}
       >
         <TableHeader label="Nr." />
@@ -242,17 +240,6 @@ function InvoicesTable() {
         <TableHeader label="Avots" withInfo />
         <TableHeader label="Drošība" withInfo />
         <TableHeader label="Darbības" />
-      </div>
-
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-gray-50 border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-wider text-gray-500 items-center"
-        style={{ gridTemplateColumns: MOBILE_GRID }}
-      >
-        <TableHeader label="Nr." />
-        <TableHeader label="Piegādātājs" />
-        <TableHeader label="Summa" />
-        <TableHeader label="Statuss" />
       </div>
 
       {ROWS.map((row, i) => (
@@ -273,59 +260,40 @@ function TableHeader({ label, withInfo = false }: { label: string; withInfo?: bo
 
 function InvoiceTableRow({ row }: { row: InvoiceRow }) {
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop row */}
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1200px]"
+      style={{ gridTemplateColumns: DESKTOP_GRID }}
+    >
       <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1200px]"
-        style={{ gridTemplateColumns: DESKTOP_GRID }}
+        className="text-[12px] text-gray-700 tabular-nums truncate pr-2"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <div
-          className="text-[12px] text-gray-700 tabular-nums truncate pr-2"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.nr}
-        </div>
-        <div className="text-[13px] text-gray-600 tabular-nums">{row.date}</div>
-        <div className="text-[14px] text-gray-900 font-medium truncate pr-3">
-          {row.supplier}
-        </div>
-        <div className="text-right tabular-nums font-medium pr-3">{row.amount}</div>
-        <div className="text-gray-600 text-[12px] uppercase">{row.currency}</div>
-        <div className="tabular-nums text-gray-700">{row.lines}</div>
-        <div>
-          <ProjectPill>{row.project}</ProjectPill>
-        </div>
-        <div>
-          <StatusPill />
-        </div>
-        <div>
-          <AiPill />
-        </div>
-        <div>
-          <ScorePill />
-        </div>
-        <div className="flex items-center gap-1">
-          <RowIconBtn Icon={Eye} />
-          <RowIconBtn Icon={Edit2} />
-        </div>
+        {row.nr}
       </div>
-
-      {/* Mobile row */}
-      <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_GRID }}
-      >
-        <div
-          className="text-[11px] text-gray-700 tabular-nums truncate"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.nr}
-        </div>
-        <div className="font-medium truncate pr-1">{row.supplier}</div>
-        <div className="text-right tabular-nums font-medium">{row.amount}</div>
-        <div>
-          <StatusPill compact />
-        </div>
+      <div className="text-[13px] text-gray-600 tabular-nums">{row.date}</div>
+      <div className="text-[14px] text-gray-900 font-medium truncate pr-3">
+        {row.supplier}
+      </div>
+      <div className="text-right tabular-nums font-medium pr-3">
+        {row.amount}
+      </div>
+      <div className="text-gray-600 text-[12px] uppercase">{row.currency}</div>
+      <div className="tabular-nums text-gray-700">{row.lines}</div>
+      <div>
+        <ProjectPill>{row.project}</ProjectPill>
+      </div>
+      <div>
+        <StatusPill />
+      </div>
+      <div>
+        <AiPill />
+      </div>
+      <div>
+        <ScorePill />
+      </div>
+      <div className="flex items-center gap-1">
+        <RowIconBtn Icon={Eye} />
+        <RowIconBtn Icon={Edit2} />
       </div>
     </div>
   );

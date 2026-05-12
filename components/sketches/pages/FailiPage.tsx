@@ -391,14 +391,12 @@ function NativeSelect({ label }: { label: string }) {
 }
 
 const DESKTOP_COLS = "40px 1fr 160px 1fr 140px 160px 120px 80px";
-const MOBILE_COLS = "40px 1fr 110px 90px 80px";
 
 function FilesTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1100px]"
+        className="grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1100px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span aria-hidden />
@@ -408,18 +406,6 @@ function FilesTable() {
         <SortHeader label="Augšupielādēja" />
         <SortHeader label="Datums" />
         <SortHeader label="Izmērs" />
-        <span aria-hidden />
-      </div>
-
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span aria-hidden />
-        <span>Nosaukums</span>
-        <span>Datums</span>
-        <span>Izmērs</span>
         <span aria-hidden />
       </div>
 
@@ -459,78 +445,52 @@ function FileTableRow({ row }: { row: FileRow }) {
   const badge = KIND_BADGE[row.kind];
   const KindIcon = badge.Icon;
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop */}
-      <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1100px]"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
-      >
-        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-        <div className="flex items-center gap-3 min-w-0 pr-3">
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1100px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
+      <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
+      <div className="flex items-center gap-3 min-w-0 pr-3">
+        <div
+          className={`h-10 w-10 rounded-lg ${badge.bg} flex items-center justify-center shrink-0`}
+        >
+          <KindIcon className={`w-5 h-5 ${badge.text}`} />
+        </div>
+        <div className="min-w-0">
+          <div className="text-[14px] font-medium text-gray-900 truncate">
+            {row.name}
+          </div>
           <div
-            className={`h-10 w-10 rounded-lg ${badge.bg} flex items-center justify-center shrink-0`}
+            className="text-[11px] uppercase tracking-wider text-gray-400 mt-0.5 truncate"
+            style={{ fontFamily: MONO_STACK }}
           >
-            <KindIcon className={`w-5 h-5 ${badge.text}`} />
-          </div>
-          <div className="min-w-0">
-            <div className="text-[14px] font-medium text-gray-900 truncate">
-              {row.name}
-            </div>
-            <div
-              className="text-[11px] uppercase tracking-wider text-gray-400 mt-0.5 truncate"
-              style={{ fontFamily: MONO_STACK }}
-            >
-              {row.meta}
-            </div>
+            {row.meta}
           </div>
         </div>
-        <div>
-          <ContextPill row={row} />
-        </div>
-        <div className="text-[13px] text-gray-700 truncate pr-2">
-          {row.link ? (
-            <span
-              className="text-violet-700 font-medium tabular-nums"
-              style={{ fontFamily: MONO_STACK }}
-            >
-              {row.link}
-            </span>
-          ) : (
-            <span className="text-gray-400">—</span>
-          )}
-        </div>
-        <div className="text-[13px] text-gray-700 truncate pr-2">
-          {row.uploader}
-        </div>
-        <div className="text-[13px] text-gray-600 tabular-nums">{row.date}</div>
-        <div className="text-[13px] font-medium text-gray-700 tabular-nums">
-          {row.size}
-        </div>
-        <RowActions />
       </div>
-
-      {/* Mobile */}
-      <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-        <div className="flex items-center gap-2 min-w-0">
-          <div
-            className={`h-8 w-8 rounded-lg ${badge.bg} flex items-center justify-center shrink-0`}
+      <div>
+        <ContextPill row={row} />
+      </div>
+      <div className="text-[13px] text-gray-700 truncate pr-2">
+        {row.link ? (
+          <span
+            className="text-violet-700 font-medium tabular-nums"
+            style={{ fontFamily: MONO_STACK }}
           >
-            <KindIcon className={`w-4 h-4 ${badge.text}`} />
-          </div>
-          <span className="truncate text-[12px] text-gray-900">{row.name}</span>
-        </div>
-        <div className="text-[11px] text-gray-600 tabular-nums truncate">
-          {row.date}
-        </div>
-        <div className="text-[12px] font-medium text-gray-700 tabular-nums">
-          {row.size}
-        </div>
-        <RowActions compact />
+            {row.link}
+          </span>
+        ) : (
+          <span className="text-gray-400">—</span>
+        )}
       </div>
+      <div className="text-[13px] text-gray-700 truncate pr-2">
+        {row.uploader}
+      </div>
+      <div className="text-[13px] text-gray-600 tabular-nums">{row.date}</div>
+      <div className="text-[13px] font-medium text-gray-700 tabular-nums">
+        {row.size}
+      </div>
+      <RowActions />
     </div>
   );
 }
@@ -546,22 +506,20 @@ function ContextPill({ row }: { row: FileRow }) {
   );
 }
 
-function RowActions({ compact = false }: { compact?: boolean }) {
-  const size = compact ? "h-7 w-7" : "h-8 w-8";
-  const iconSize = compact ? "w-3.5 h-3.5" : "w-4 h-4";
+function RowActions() {
   return (
     <div className="flex items-center gap-1">
       <button
         aria-label="Lejupielādēt"
-        className={`${size} rounded-lg border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-500`}
+        className="h-8 w-8 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-500"
       >
-        <Download className={iconSize} />
+        <Download className="w-4 h-4" />
       </button>
       <button
         aria-label="Dzēst"
-        className={`${size} rounded-lg border border-gray-200 bg-white hover:bg-red-50 hover:border-red-200 flex items-center justify-center text-gray-500 hover:text-red-500`}
+        className="h-8 w-8 rounded-lg border border-gray-200 bg-white hover:bg-red-50 hover:border-red-200 flex items-center justify-center text-gray-500 hover:text-red-500"
       >
-        <Trash2 className={iconSize} />
+        <Trash2 className="w-4 h-4" />
       </button>
     </div>
   );

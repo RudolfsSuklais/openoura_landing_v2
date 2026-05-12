@@ -231,14 +231,12 @@ function UsersListCard() {
 }
 
 const DESKTOP_COLS = "140px 90px 200px 170px 1fr 140px 160px 120px";
-const MOBILE_COLS = "100px 80px 140px 1fr 90px";
 
 function UsersTable() {
   return (
     <div className="overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-white border-b border-gray-200 px-5 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1180px]"
+        className="grid bg-white border-b border-gray-200 px-5 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1180px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <HeaderLabel label="Lietotājvārds" />
@@ -249,18 +247,6 @@ function UsersTable() {
         <HeaderLabel label="Instrumenti" />
         <HeaderLabel label="Izveidots" />
         <HeaderLabel label="Darbības" />
-      </div>
-
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>Lietotājvārds</span>
-        <span>Vārds</span>
-        <span>Loma</span>
-        <span>Prasmes</span>
-        <span>Darbības</span>
       </div>
 
       {USERS.map((u, i) => (
@@ -287,71 +273,40 @@ function HeaderLabel({
 
 function UserRow({ user }: { user: User }) {
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop */}
-      <div
-        className="hidden md:grid px-5 py-5 items-start text-[14px] text-gray-900 min-w-[1180px]"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
-      >
-        <div className="text-[13px] text-gray-700 truncate pr-2">
-          {user.username}
-        </div>
-        <div className="text-[13px] text-gray-700 truncate pr-2">
-          {user.firstName}
-        </div>
-        <div className="text-[13px] text-gray-600 truncate pr-2">
-          {user.email}
-        </div>
-        <div className="pr-2">
-          <RolePill role={user.role} />
-        </div>
-        <div className="pr-3">
-          <SkillsCell skills={user.skills} />
-        </div>
-        <div className="pr-2">
-          <InstrumentBadge instrument={user.instrument} />
-        </div>
-        <div className="text-[12px] text-gray-500 tabular-nums pr-2">
-          {user.created}
-        </div>
-        <RowActions />
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-5 py-5 items-start text-[14px] text-gray-900 min-w-[1180px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
+      <div className="text-[13px] text-gray-700 truncate pr-2">
+        {user.username}
       </div>
-
-      {/* Mobile */}
-      <div
-        className="md:hidden grid px-3 py-4 items-start text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <div className="text-[12px] text-gray-700 truncate">
-          {user.username}
-        </div>
-        <div className="text-[12px] text-gray-700 truncate">
-          {user.firstName}
-        </div>
-        <div>
-          <RolePill role={user.role} compact />
-        </div>
-        <div>
-          <SkillsCell skills={user.skills} />
-        </div>
-        <RowActions compact />
+      <div className="text-[13px] text-gray-700 truncate pr-2">
+        {user.firstName}
       </div>
+      <div className="text-[13px] text-gray-600 truncate pr-2">
+        {user.email}
+      </div>
+      <div className="pr-2">
+        <RolePill role={user.role} />
+      </div>
+      <div className="pr-3">
+        <SkillsCell skills={user.skills} />
+      </div>
+      <div className="pr-2">
+        <InstrumentBadge instrument={user.instrument} />
+      </div>
+      <div className="text-[12px] text-gray-500 tabular-nums pr-2">
+        {user.created}
+      </div>
+      <RowActions />
     </div>
   );
 }
 
-function RolePill({
-  role,
-  compact = false,
-}: {
-  role: Role;
-  compact?: boolean;
-}) {
+function RolePill({ role }: { role: Role }) {
   return (
     <span
-      className={`inline-flex items-center justify-center text-center rounded-lg border font-bold tracking-wider ${ROLE_CLASS[role]} ${
-        compact ? "px-2 py-1 text-[9px]" : "px-3 py-1.5 text-[11px]"
-      }`}
+      className={`inline-flex items-center justify-center text-center rounded-lg border font-bold tracking-wider px-3 py-1.5 text-[11px] ${ROLE_CLASS[role]}`}
     >
       {role}
     </span>
@@ -422,34 +377,32 @@ function InstrumentBadge({ instrument }: { instrument?: Instrument }) {
   );
 }
 
-function RowActions({ compact = false }: { compact?: boolean }) {
-  const size = compact ? "h-7 w-7" : "h-8 w-8";
-  const iconSize = compact ? "w-3.5 h-3.5" : "w-4 h-4";
+function RowActions() {
   return (
     <div className="flex items-center gap-1">
       <button
         aria-label="Labot"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500"
       >
-        <Edit2 className={iconSize} />
+        <Edit2 className="w-4 h-4" />
       </button>
       <button
         aria-label="Sūtīt"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500"
       >
-        <Send className={iconSize} />
+        <Send className="w-4 h-4" />
       </button>
       <button
         aria-label="Bloķēt"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-gray-100 text-gray-500"
       >
-        <Ban className={iconSize} />
+        <Ban className="w-4 h-4" />
       </button>
       <button
         aria-label="Dzēst"
-        className={`${size} rounded-md flex items-center justify-center hover:bg-red-50 text-red-500`}
+        className="h-8 w-8 rounded-md flex items-center justify-center hover:bg-red-50 text-red-500"
       >
-        <Trash2 className={iconSize} />
+        <Trash2 className="w-4 h-4" />
       </button>
     </div>
   );

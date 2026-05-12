@@ -123,7 +123,6 @@ const TYPE_META: Record<
 };
 
 const DESKTOP_COLS = "150px 130px 130px 1fr 140px 120px 150px 120px 60px";
-const MOBILE_COLS = "110px 1fr 100px 90px";
 
 export function RekiniPage() {
   return (
@@ -301,9 +300,9 @@ function DateBtn({ label }: { label: string }) {
    ────────────────────────────────────────────────────────── */
 function InvoicesTable() {
   return (
-    <div className="border-t border-gray-200">
+    <div className="border-t border-gray-200 overflow-x-auto">
       <div
-        className="hidden md:grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500"
+        className="grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500 min-w-[1100px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span>NR.</span>
@@ -315,16 +314,6 @@ function InvoicesTable() {
         <span className="text-right">KOPĀ</span>
         <span>STATUSS</span>
         <span className="text-right">DARBĪBAS</span>
-      </div>
-
-      <div
-        className="md:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-wider text-gray-500"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>NR.</span>
-        <span>SAŅĒMĒJS</span>
-        <span className="text-right">KOPĀ</span>
-        <span>STATUSS</span>
       </div>
 
       {ROWS.map((row) => (
@@ -342,80 +331,56 @@ function InvoiceRow({ row }: { row: Row }) {
     : "font-semibold text-gray-900";
 
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-700 min-w-[1100px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
       <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-700"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
+        className="font-medium text-gray-900 tabular-nums"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <div
-          className="font-medium text-gray-900 tabular-nums"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.nr}
-        </div>
-        <div className="flex items-center gap-2 text-[13px]">
-          <TypeIcon className="w-4 h-4 shrink-0" style={{ color: meta.color }} />
-          <span>{row.type}</span>
-        </div>
-        <div
-          className="tabular-nums text-gray-600"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.date}
-        </div>
-        <div className="truncate pr-3 font-medium text-gray-900">
-          {row.recipient}
-        </div>
-        <div
-          className={`text-right tabular-nums ${
-            row.negative ? "text-red-600" : "text-gray-700"
-          }`}
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.netto}
-        </div>
-        <div
-          className={`text-right tabular-nums ${
-            row.negative ? "text-red-600" : "text-gray-700"
-          }`}
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.vat}
-        </div>
-        <div
-          className={`text-right tabular-nums ${totalClass}`}
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.total}
-        </div>
-        <div>
-          <StatusPill />
-        </div>
-        <div className="flex justify-end">
-          <ActionButton />
-        </div>
+        {row.nr}
       </div>
-
+      <div className="flex items-center gap-2 text-[13px]">
+        <TypeIcon className="w-4 h-4 shrink-0" style={{ color: meta.color }} />
+        <span>{row.type}</span>
+      </div>
       <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
+        className="tabular-nums text-gray-600"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <div
-          className="font-medium text-gray-900 tabular-nums truncate"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.nr}
-        </div>
-        <div className="truncate font-medium text-gray-900">{row.recipient}</div>
-        <div
-          className={`text-right tabular-nums ${totalClass}`}
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.total}
-        </div>
-        <div>
-          <StatusPill />
-        </div>
+        {row.date}
+      </div>
+      <div className="truncate pr-3 font-medium text-gray-900">
+        {row.recipient}
+      </div>
+      <div
+        className={`text-right tabular-nums ${
+          row.negative ? "text-red-600" : "text-gray-700"
+        }`}
+        style={{ fontFamily: MONO_STACK }}
+      >
+        {row.netto}
+      </div>
+      <div
+        className={`text-right tabular-nums ${
+          row.negative ? "text-red-600" : "text-gray-700"
+        }`}
+        style={{ fontFamily: MONO_STACK }}
+      >
+        {row.vat}
+      </div>
+      <div
+        className={`text-right tabular-nums ${totalClass}`}
+        style={{ fontFamily: MONO_STACK }}
+      >
+        {row.total}
+      </div>
+      <div>
+        <StatusPill />
+      </div>
+      <div className="flex justify-end">
+        <ActionButton />
       </div>
     </div>
   );

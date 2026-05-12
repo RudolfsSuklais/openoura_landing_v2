@@ -269,14 +269,12 @@ function Filters() {
 
 const DESKTOP_COLS =
   "140px 1fr 120px 110px 120px 100px 100px 110px 110px";
-const MOBILE_COLS = "1fr 100px 100px";
 
 function ExpensesTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1080px]"
+        className="grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1080px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span>Nr.</span>
@@ -293,16 +291,6 @@ function ExpensesTable() {
         <span>Darbības</span>
       </div>
 
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-gray-50 border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>Piegādātājs</span>
-        <span className="text-right">Kopā</span>
-        <span>Statuss</span>
-      </div>
-
       {ROWS.map((row, i) => (
         <ExpenseTableRow key={i} row={row} />
       ))}
@@ -313,73 +301,47 @@ function ExpensesTable() {
 function ExpenseTableRow({ row }: { row: ExpenseRow }) {
   const CategoryIcon = CATEGORY_ICON[row.category];
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop row */}
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1080px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
       <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1080px]"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
+        className="text-[12px] text-gray-700 truncate pr-2 tabular-nums"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <div
-          className="text-[12px] text-gray-700 truncate pr-2 tabular-nums"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.nr}
-        </div>
-        <div className="flex items-center gap-2 min-w-0 pr-3">
-          <span className="truncate text-[14px] text-gray-900">
-            {row.supplier}
-          </span>
-          {row.recurring && (
-            <RotateCw className="w-3.5 h-3.5 text-violet-500 shrink-0" />
-          )}
-        </div>
-        <div className="flex items-center gap-2 min-w-0">
-          <CategoryIcon className="w-4 h-4 text-gray-500 shrink-0" />
-          <span className="text-[14px] text-gray-700 truncate">
-            {row.category}
-          </span>
-        </div>
-        <div className="text-[13px] text-gray-600 tabular-nums">
-          {row.date}
-        </div>
-        <div className="text-[13px] text-gray-600 tabular-nums">
-          {row.deadline}
-        </div>
-        <div className="text-right text-[14px] text-gray-700 tabular-nums">
-          {row.net}
-        </div>
-        <div className="text-right text-[14px] font-semibold text-gray-900 tabular-nums">
-          {row.total}
-        </div>
-        <div>
-          <StatusPill status={row.status} />
-        </div>
-        <div className="flex items-center gap-1">
-          <IconBtn Icon={ArrowLeftRight} label="Pārvietot" />
-          <IconBtn Icon={Edit2} label="Labot" />
-          <IconBtn Icon={Trash2} label="Dzēst" />
-        </div>
+        {row.nr}
       </div>
-
-      {/* Mobile row */}
-      <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <div className="flex items-center gap-1.5 min-w-0">
-          <span className="truncate text-[13px] text-gray-900">
-            {row.supplier}
-          </span>
-          {row.recurring && (
-            <RotateCw className="w-3 h-3 text-violet-500 shrink-0" />
-          )}
-        </div>
-        <div className="text-right text-[13px] font-semibold text-gray-900 tabular-nums">
-          {row.total}
-        </div>
-        <div>
-          <StatusPill status={row.status} compact />
-        </div>
+      <div className="flex items-center gap-2 min-w-0 pr-3">
+        <span className="truncate text-[14px] text-gray-900">
+          {row.supplier}
+        </span>
+        {row.recurring && (
+          <RotateCw className="w-3.5 h-3.5 text-violet-500 shrink-0" />
+        )}
+      </div>
+      <div className="flex items-center gap-2 min-w-0">
+        <CategoryIcon className="w-4 h-4 text-gray-500 shrink-0" />
+        <span className="text-[14px] text-gray-700 truncate">
+          {row.category}
+        </span>
+      </div>
+      <div className="text-[13px] text-gray-600 tabular-nums">{row.date}</div>
+      <div className="text-[13px] text-gray-600 tabular-nums">
+        {row.deadline}
+      </div>
+      <div className="text-right text-[14px] text-gray-700 tabular-nums">
+        {row.net}
+      </div>
+      <div className="text-right text-[14px] font-semibold text-gray-900 tabular-nums">
+        {row.total}
+      </div>
+      <div>
+        <StatusPill status={row.status} />
+      </div>
+      <div className="flex items-center gap-1">
+        <IconBtn Icon={ArrowLeftRight} label="Pārvietot" />
+        <IconBtn Icon={Edit2} label="Labot" />
+        <IconBtn Icon={Trash2} label="Dzēst" />
       </div>
     </div>
   );

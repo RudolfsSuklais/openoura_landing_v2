@@ -231,14 +231,12 @@ function QuickActions() {
 }
 
 const DESKTOP_COLS = "40px 140px 1fr 200px 140px 130px 120px 80px";
-const MOBILE_COLS = "40px 120px 1fr 110px 100px 60px";
 
 function TamesTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1000px]"
+        className="grid bg-white border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1000px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span aria-hidden />
@@ -249,19 +247,6 @@ function TamesTable() {
         <SortHeader label="Statuss" />
         <SortHeader label="Datums" />
         <span>Darbības</span>
-      </div>
-
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-white border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span aria-hidden />
-        <span>Nr.</span>
-        <span>Projekts</span>
-        <span>Darbinieks</span>
-        <span>Statuss</span>
-        <span aria-hidden />
       </div>
 
       {ROWS.map((row, i) => (
@@ -282,65 +267,32 @@ function SortHeader({ label }: { label: string }) {
 
 function TamesRow({ row }: { row: Row }) {
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop row */}
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1000px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
+    >
+      <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
       <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1000px]"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
+        className="text-[13px] text-gray-700 truncate pr-2 tabular-nums"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <input
-          type="checkbox"
-          className="h-4 w-4 rounded border-gray-300"
-        />
-        <div
-          className="text-[13px] text-gray-700 truncate pr-2 tabular-nums"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.nr}
-        </div>
-        <div className="text-[14px] text-gray-900 truncate pr-3">
-          {row.project}
-        </div>
-        <div className="flex items-center gap-2 min-w-0 pr-3">
-          <Building2 className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-          <span className="text-[14px] text-gray-700 truncate">
-            {row.client}
-          </span>
-        </div>
-        <Worker worker={row.worker} />
-        <div>
-          <StatusPill status={row.status} />
-        </div>
-        <div className="text-[13px] text-gray-600 tabular-nums">
-          {row.date}
-        </div>
-        <RowActions />
+        {row.nr}
       </div>
-
-      {/* Mobile row */}
-      <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <input
-          type="checkbox"
-          className="h-4 w-4 rounded border-gray-300"
-        />
-        <div
-          className="text-[12px] text-gray-700 truncate tabular-nums"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.nr}
-        </div>
-        <div className="text-[13px] text-gray-900 truncate">
-          {row.project}
-        </div>
-        <Worker worker={row.worker} compact />
-        <div>
-          <StatusPill status={row.status} compact />
-        </div>
-        <RowActions compact />
+      <div className="text-[14px] text-gray-900 truncate pr-3">
+        {row.project}
       </div>
+      <div className="flex items-center gap-2 min-w-0 pr-3">
+        <Building2 className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+        <span className="text-[14px] text-gray-700 truncate">
+          {row.client}
+        </span>
+      </div>
+      <Worker worker={row.worker} />
+      <div>
+        <StatusPill status={row.status} />
+      </div>
+      <div className="text-[13px] text-gray-600 tabular-nums">{row.date}</div>
+      <RowActions />
     </div>
   );
 }

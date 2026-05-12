@@ -28,7 +28,7 @@ const PLANS: Plan[] = [
     roi: "Atpelnās aptuveni 14 stundu ietaupījumā mēnesī.",
     features: [
       "10 lietotāji",
-      "20 projekti",
+      "50 projekti",
       "5 GB failu glabātuve",
       "Noliktava un atskaites",
       "Darbinieku laika uzskaite",
@@ -94,7 +94,7 @@ export function Pricing() {
         <FadeUp>
           <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted mb-12 flex items-center gap-3">
             <span className="inline-block h-px w-8 bg-ink/40" />
-            Cenas · 04
+            Cenas · 07
           </div>
         </FadeUp>
 
@@ -143,8 +143,28 @@ export function Pricing() {
           </div>
         </FadeUp>
 
-        {/* ── C. THREE PLAN COLUMNS ─────────────────────────────── */}
-        <div className="mt-24 md:mt-32 grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/[0.08]">
+        {/* ── C. TRUST STRIP ───────────────────────────────────── */}
+        <FadeUp delay={0.15}>
+          <div className="mt-24 md:mt-32 mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-muted">
+            <span className="inline-flex items-center gap-1.5">
+              <span aria-hidden className="text-violet-500">✓</span>
+              Bez kredītkartes
+            </span>
+            <span aria-hidden className="inline-block h-3 w-px bg-ink/15" />
+            <span className="inline-flex items-center gap-1.5">
+              <span aria-hidden className="text-violet-500">✓</span>
+              Bez saistībām
+            </span>
+            <span aria-hidden className="inline-block h-3 w-px bg-ink/15" />
+            <span className="inline-flex items-center gap-1.5">
+              <span aria-hidden className="text-violet-500">✓</span>
+              Atcel jebkurā brīdī
+            </span>
+          </div>
+        </FadeUp>
+
+        {/* ── D. THREE PLAN COLUMNS ─────────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/[0.08]">
           {PLANS.map((plan, i) => (
             <FadeUp key={plan.key} delay={0.2 + i * 0.1}>
               <PlanColumn plan={plan} />
@@ -152,7 +172,7 @@ export function Pricing() {
           ))}
         </div>
 
-        {/* ── D. RISK REVERSAL FOOTER ───────────────────────────── */}
+        {/* ── E. RISK REVERSAL FOOTER ───────────────────────────── */}
         <FadeUp delay={0.5}>
           <div className="mt-24 md:mt-32">
             <div className="border-t hairline" />

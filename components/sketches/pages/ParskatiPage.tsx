@@ -111,7 +111,6 @@ const ROWS: WorkerRow[] = [
 ];
 
 const DESKTOP_COLS = "1fr 130px 130px 130px 130px 220px";
-const MOBILE_COLS = "1fr 200px";
 
 export function ParskatiPage({
   onAnyRowClick,
@@ -226,9 +225,9 @@ function WorkersTable({
   onRowClick: (row: WorkerRow) => void;
 }) {
   return (
-    <div className="border-t border-gray-200">
+    <div className="border-t border-gray-200 overflow-x-auto">
       <div
-        className="hidden md:grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500"
+        className="grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-wider text-gray-500 min-w-[900px]"
         style={{ gridTemplateColumns: DESKTOP_COLS }}
       >
         <span>Darbinieks</span>
@@ -236,14 +235,6 @@ function WorkersTable({
         <span className="text-right">Plānotas</span>
         <span className="text-right">Pārsniegtas</span>
         <span className="text-right">Ietaupītas</span>
-        <span className="text-right">Efektivitāte</span>
-      </div>
-
-      <div
-        className="md:hidden grid bg-gray-50 border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-wider text-gray-500"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <span>Darbinieks</span>
         <span className="text-right">Efektivitāte</span>
       </div>
 
@@ -276,40 +267,23 @@ function RowView({
           onClick();
         }
       }}
-      className="relative border-b border-gray-100 cursor-pointer hover:bg-violet-50/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-inset"
+      className="relative grid border-b border-gray-100 cursor-pointer hover:bg-violet-50/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-inset px-4 py-4 items-center text-[14px] text-gray-700 min-w-[900px]"
+      style={{ gridTemplateColumns: DESKTOP_COLS }}
     >
-      {/* Desktop */}
-      <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-700"
-        style={{ gridTemplateColumns: DESKTOP_COLS }}
-      >
-        <WorkerCell initial={row.initial} name={row.name} id={row.id} />
-        <HourCell value={row.worked} />
-        <HourCell value={row.planned} />
-        <HourCell value={row.over} tone={row.over === "0h 0m" ? "muted" : "danger"} />
-        <HourCell value={row.saved} tone={row.saved === "0h 0m" ? "muted" : "success"} />
-        <div className="flex justify-end">
-          <VerdictPill verdict={row.verdict} />
-        </div>
+      <WorkerCell initial={row.initial} name={row.name} id={row.id} />
+      <HourCell value={row.worked} />
+      <HourCell value={row.planned} />
+      <HourCell
+        value={row.over}
+        tone={row.over === "0h 0m" ? "muted" : "danger"}
+      />
+      <HourCell
+        value={row.saved}
+        tone={row.saved === "0h 0m" ? "muted" : "success"}
+      />
+      <div className="flex justify-end">
+        <VerdictPill verdict={row.verdict} />
       </div>
-
-      {/* Mobile */}
-      <div
-        className="md:hidden grid px-3 py-3 items-center gap-2"
-        style={{ gridTemplateColumns: MOBILE_COLS }}
-      >
-        <div className="min-w-0">
-          <WorkerCell initial={row.initial} name={row.name} id={row.id} compact />
-          <div className="mt-2 text-[12px] text-gray-500 tabular-nums" style={{ fontFamily: MONO_STACK }}>
-            <span className="text-gray-700 font-medium">{row.worked}</span>
-            <span className="text-gray-400"> / {row.planned}</span>
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <VerdictPill verdict={row.verdict} />
-        </div>
-      </div>
-
     </div>
   );
 }

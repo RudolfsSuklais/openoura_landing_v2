@@ -242,16 +242,15 @@ function FilterDropdown({ label }: { label: string }) {
   );
 }
 
+const STOCK_COLS =
+  "40px 140px 1fr 120px 90px 90px 140px 140px 160px 140px 90px";
+
 function StockTable() {
   return (
     <div className="border-t border-gray-200 overflow-x-auto">
-      {/* Desktop header */}
       <div
-        className="hidden md:grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1380px]"
-        style={{
-          gridTemplateColumns:
-            "40px 140px 1fr 120px 90px 90px 140px 140px 160px 140px 90px",
-        }}
+        className="grid bg-gray-50 border-b border-gray-200 px-4 py-3 text-[11px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center min-w-[1380px]"
+        style={{ gridTemplateColumns: STOCK_COLS }}
       >
         <Checkbox />
         <HeaderCell label="SKU" withInfo />
@@ -266,17 +265,6 @@ function StockTable() {
         <HeaderCell label="Statuss" sortable={false} />
       </div>
 
-      {/* Mobile header */}
-      <div
-        className="md:hidden grid bg-gray-50 border-b border-gray-200 px-3 py-3 text-[10px] uppercase font-semibold tracking-[0.05em] text-gray-500 items-center"
-        style={{ gridTemplateColumns: "100px 1fr 60px 80px" }}
-      >
-        <HeaderCell label="SKU" sortable={false} />
-        <HeaderCell label="Nosaukums" sortable={false} />
-        <HeaderCell label="Atl." sortable={false} />
-        <HeaderCell label="Statuss" sortable={false} />
-      </div>
-
       {ROWS.map((row, i) => (
         <StockTableRow key={i} row={row} />
       ))}
@@ -286,76 +274,44 @@ function StockTable() {
 
 function StockTableRow({ row }: { row: StockRow }) {
   return (
-    <div className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-      {/* Desktop row */}
+    <div
+      className="grid border-b border-gray-100 hover:bg-gray-50 transition-colors px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1380px]"
+      style={{ gridTemplateColumns: STOCK_COLS }}
+    >
+      <Checkbox />
       <div
-        className="hidden md:grid px-4 py-4 items-center text-[14px] text-gray-900 min-w-[1380px]"
-        style={{
-          gridTemplateColumns:
-            "40px 140px 1fr 120px 90px 90px 140px 140px 160px 140px 90px",
-        }}
+        className="text-[13px] text-gray-600 truncate pr-2"
+        style={{ fontFamily: MONO_STACK }}
       >
-        <Checkbox />
+        {row.sku}
+      </div>
+      <div className="flex items-center gap-2 min-w-0 pr-3 overflow-hidden">
         <div
-          className="text-[13px] text-gray-600 truncate pr-2"
-          style={{ fontFamily: MONO_STACK }}
+          className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
+          style={{ background: "#EDE9FE" }}
         >
-          {row.sku}
+          <Box className="w-4 h-4" style={{ color: "#7C3AED" }} />
         </div>
-        <div className="flex items-center gap-2 min-w-0 pr-3 overflow-hidden">
-          <div
-            className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
-            style={{ background: "#EDE9FE" }}
-          >
-            <Box className="w-4 h-4" style={{ color: "#7C3AED" }} />
-          </div>
-          <span className="truncate text-[14px] text-gray-900">{row.name}</span>
+        <span className="truncate text-[14px] text-gray-900">{row.name}</span>
+      </div>
+      <div className="pr-3">
+        <CategoryPill>{row.category}</CategoryPill>
+      </div>
+      <div className="text-[16px] font-semibold text-gray-900">{row.qty}</div>
+      <div className="text-[12px] text-gray-500 uppercase">{row.unit}</div>
+      <div className="text-[14px] text-gray-600">{row.avgBuy}</div>
+      <div>
+        <div className="text-[14px] font-medium" style={{ color: "#6D28D9" }}>
+          {row.salePrice}
         </div>
-        <div className="pr-3">
-          <CategoryPill>{row.category}</CategoryPill>
-        </div>
-        <div className="text-[16px] font-semibold text-gray-900">{row.qty}</div>
-        <div className="text-[12px] text-gray-500 uppercase">{row.unit}</div>
-        <div className="text-[14px] text-gray-600">{row.avgBuy}</div>
-        <div>
-          <div className="text-[14px] font-medium" style={{ color: "#6D28D9" }}>
-            {row.salePrice}
-          </div>
-          <div className="text-[10px]" style={{ color: "#A78BFA" }}>
-            {row.profit}
-          </div>
-        </div>
-        <div className="text-[14px] text-gray-400">{row.supplier}</div>
-        <div className="text-[13px] text-gray-600">{row.lastRestock}</div>
-        <div>
-          <StatusPill />
+        <div className="text-[10px]" style={{ color: "#A78BFA" }}>
+          {row.profit}
         </div>
       </div>
-
-      {/* Mobile row */}
-      <div
-        className="md:hidden grid px-3 py-3 items-center text-[13px] text-gray-900 gap-2"
-        style={{ gridTemplateColumns: "100px 1fr 60px 80px" }}
-      >
-        <div
-          className="text-[11px] text-gray-600 truncate"
-          style={{ fontFamily: MONO_STACK }}
-        >
-          {row.sku}
-        </div>
-        <div className="flex items-center gap-1.5 min-w-0">
-          <div
-            className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
-            style={{ background: "#EDE9FE" }}
-          >
-            <Box className="w-3 h-3" style={{ color: "#7C3AED" }} />
-          </div>
-          <span className="truncate text-[12px]">{row.name}</span>
-        </div>
-        <div className="text-[14px] font-semibold text-gray-900">{row.qty}</div>
-        <div>
-          <StatusPill compact />
-        </div>
+      <div className="text-[14px] text-gray-400">{row.supplier}</div>
+      <div className="text-[13px] text-gray-600">{row.lastRestock}</div>
+      <div>
+        <StatusPill />
       </div>
     </div>
   );
