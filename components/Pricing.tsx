@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { FadeUp } from "./FadeUp";
 import { trackCtaClick, type CtaLocation } from "@/lib/analytics";
 import { useSectionView } from "./analytics/useSectionView";
 
+type PlanKey = "starter" | "professional" | "enterprise";
+
 type Plan = {
-  key: "starter" | "professional" | "enterprise";
+  key: PlanKey;
   label: string;
   name: string;
   cta: string;
@@ -13,7 +16,6 @@ type Plan = {
   audience: string;
   roi: string;
   features: string[];
-  recommended: boolean;
   ctaLocation: CtaLocation;
 };
 
@@ -34,12 +36,11 @@ const PLANS: Plan[] = [
       "Darbinieku laika uzskaite",
       "100 AI pavadzīmes/mēn",
     ],
-    recommended: false,
     ctaLocation: "pricing_sakums",
   },
   {
     key: "professional",
-    label: "Populārākais",
+    label: "Augošajam",
     name: "Professional",
     cta: "Pieprasi demo",
     price: 199,
@@ -55,7 +56,6 @@ const PLANS: Plan[] = [
       "CMR pavadzīmes",
       "1000 AI pavadzīmes/mēn",
     ],
-    recommended: true,
     ctaLocation: "pricing_cehs",
   },
   {
@@ -74,13 +74,21 @@ const PLANS: Plan[] = [
       "5000 AI pavadzīmes/mēn",
       "Prioritārais atbalsts",
     ],
-    recommended: false,
     ctaLocation: "pricing_razotne",
   },
 ];
 
+function recommendFor(employees: number): PlanKey {
+  if (employees <= 10) return "starter";
+  if (employees <= 30) return "professional";
+  return "enterprise";
+}
+
 export function Pricing() {
   const sectionRef = useSectionView<HTMLElement>("viewed_pricing");
+  const [employees, setEmployees] = useState(10);
+  const recommended = recommendFor(employees);
+  const recommendedPlan = PLANS.find((p) => p.key === recommended)!;
 
   return (
     <section
@@ -145,7 +153,7 @@ export function Pricing() {
 
         {/* ── C. TRUST STRIP ───────────────────────────────────── */}
         <FadeUp delay={0.15}>
-          <div className="mt-24 md:mt-32 mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-muted">
+          <div className="mt-24 md:mt-32 mb-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-muted">
             <span className="inline-flex items-center gap-1.5">
               <span aria-hidden className="text-violet-500">✓</span>
               Bez ieviešanas izmaksām
@@ -163,11 +171,20 @@ export function Pricing() {
           </div>
         </FadeUp>
 
+        {/* ── C.5 TIER RECOMMENDER ─────────────────────────────── */}
+        <FadeUp delay={0.18}>
+          <PlanRecommender
+            employees={employees}
+            onChange={setEmployees}
+            recommended={recommendedPlan}
+          />
+        </FadeUp>
+
         {/* ── D. THREE PLAN COLUMNS ─────────────────────────────── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-ink/[0.08]">
           {PLANS.map((plan, i) => (
             <FadeUp key={plan.key} delay={0.2 + i * 0.1}>
-              <PlanColumn plan={plan} />
+              <PlanColumn plan={plan} isRecommended={plan.key === recommended} />
             </FadeUp>
           ))}
         </div>
@@ -190,12 +207,16 @@ export function Pricing() {
    PLAN COLUMN
    ─────────────────────────────────────────────────────────── */
 
-function PlanColumn({ plan }: { plan: Plan }) {
-  const priceWeight = plan.recommended ? "font-medium" : "font-normal";
+function PlanColumn({ plan, isRecommended }: { plan: Plan; isRecommended: boolean }) {
+  const priceWeight = isRecommended ? "font-medium" : "font-normal";
 
   return (
-    <div className="relative bg-paper py-12 md:py-10 px-6 md:px-8">
-      {plan.recommended && (
+    <div
+      className={`relative bg-paper py-12 md:py-10 px-6 md:px-8 transition-opacity duration-300 ${
+        isRecommended ? "opacity-100" : "opacity-70"
+      }`}
+    >
+      {isRecommended && (
         <span
           aria-hidden
           className="absolute left-0 top-0 bottom-0 w-[2px] gradient-bg"
@@ -204,14 +225,14 @@ function PlanColumn({ plan }: { plan: Plan }) {
 
       <div
         className={`mono text-[11px] uppercase tracking-[0.18em] flex items-center gap-2 ${
-          plan.recommended ? "text-ink font-semibold" : "text-muted"
+          isRecommended ? "text-ink font-semibold" : "text-muted"
         }`}
       >
-        {plan.recommended && (
+        {isRecommended && (
           <span aria-hidden className="inline-block h-px w-5 bg-ink/60" />
         )}
-        {plan.recommended && <span aria-hidden>★</span>}
-        {plan.label}
+        {isRecommended && <span aria-hidden>★</span>}
+        {isRecommended ? "Tev der" : plan.label}
       </div>
 
       <div className="mt-3 font-serif text-[3rem] md:text-[3.5rem] leading-[0.95] text-ink">
@@ -259,6 +280,77 @@ function PlanColumn({ plan }: { plan: Plan }) {
             →
           </span>
         </a>
+      </div>
+    </div>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────
+   PLAN RECOMMENDER
+   ─────────────────────────────────────────────────────────── */
+
+function PlanRecommender({
+  employees,
+  onChange,
+  recommended,
+}: {
+  employees: number;
+  onChange: (n: number) => void;
+  recommended: Plan;
+}) {
+  const clamp = (n: number) => Math.min(150, Math.max(1, n));
+  return (
+    <div className="mb-6 md:mb-8 border-y hairline">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 md:gap-8 py-5 md:py-6">
+        <div className="flex items-baseline gap-4 md:gap-5">
+          <label className="mono text-[11px] uppercase tracking-[0.18em] text-muted shrink-0">
+            Tavā uzņēmumā strādā
+          </label>
+          <div className="flex items-baseline gap-2">
+            <button
+              type="button"
+              onClick={() => onChange(clamp(employees - 1))}
+              aria-label="Mazāk cilvēku"
+              className="mono text-[18px] text-muted hover:text-ink transition-colors w-6 h-6 flex items-center justify-center"
+            >
+              −
+            </button>
+            <input
+              type="number"
+              min={1}
+              max={150}
+              step={1}
+              value={employees}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                if (Number.isFinite(v)) onChange(clamp(v));
+              }}
+              className="mono tabular-nums text-[2rem] md:text-[2.5rem] leading-none tracking-[-0.03em] text-ink bg-transparent border-0 focus:outline-none w-[4ch] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+            />
+            <span className="mono text-[12px] text-muted">cilvēki</span>
+            <button
+              type="button"
+              onClick={() => onChange(clamp(employees + 1))}
+              aria-label="Vairāk cilvēku"
+              className="mono text-[18px] text-muted hover:text-ink transition-colors w-6 h-6 flex items-center justify-center ml-1"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <div className="flex items-baseline gap-3 md:text-right md:ml-auto" aria-live="polite">
+          <span aria-hidden className="hidden md:inline-block h-px w-8 bg-ink/25" />
+          <span className="mono text-[11px] uppercase tracking-[0.18em] text-muted">
+            Tev der
+          </span>
+          <span className="text-[18px] md:text-[20px] tracking-tight text-ink font-medium">
+            {recommended.name}
+          </span>
+          <span className="mono text-[13px] tabular-nums text-muted">
+            €{recommended.price}/mēn
+          </span>
+        </div>
       </div>
     </div>
   );
