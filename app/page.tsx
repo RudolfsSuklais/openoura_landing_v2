@@ -7,6 +7,7 @@ import { SocialProof } from "@/components/SocialProof";
 import { Pricing } from "@/components/Pricing";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Solution } from "@/components/Solution";
+import { OrderJourney } from "@/components/OrderJourney";
 
 
 export default function Page() {
@@ -16,6 +17,7 @@ export default function Page() {
       <Hero />
       <Problem />
       <Solution />
+      <OrderJourney />
       <Numbers />
       <WhoItsFor />
       <SocialProof />

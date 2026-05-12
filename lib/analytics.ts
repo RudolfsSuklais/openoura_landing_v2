@@ -9,7 +9,8 @@ export type CtaLocation =
   | "solution_footer"
   | "pricing_sakums"
   | "pricing_cehs"
-  | "pricing_razotne";
+  | "pricing_razotne"
+  | "journey_pabeigts";
 
 export function trackCtaClick(location: CtaLocation) {
   if (typeof window === "undefined") return;
