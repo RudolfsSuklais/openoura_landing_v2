@@ -70,7 +70,7 @@ const TOASTS: Toast[] = [
   {
     type: "success",
     title: "Rēķins izrakstīts",
-    description: 'FIN2026-0024 SIA "Saules Stikls" — 2 643.25 EUR',
+    description: 'OO-2026-0024 SIA "Saules Stikls" — 2 643.25 EUR',
     time: "Pirms 9 min",
   },
   {

@@ -91,7 +91,7 @@ function CarriersTable() {
         <span>Nosaukums</span>
         <span>Reģ. nr.</span>
         <span>Adrese</span>
-        <span className="text-right">Kontakti</span>
+        <span className="pr-6">Kontakti</span>
         <span>Aktīvs</span>
         <span>Darbības</span>
       </div>
@@ -134,9 +134,7 @@ function CarrierRow({ row }: { row: Carrier }) {
         <div className="text-[13px] text-gray-700 truncate pr-3">
           {row.address}
         </div>
-        <div className="text-[13px] text-gray-700 text-right pr-3">
-          {row.contact}
-        </div>
+        <div className="text-[13px] text-gray-700 pr-6">{row.contact}</div>
         <div className="text-[13px] text-gray-700">{row.active}</div>
         <RowActions />
       </div>

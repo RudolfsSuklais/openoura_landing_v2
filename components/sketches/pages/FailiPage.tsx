@@ -123,7 +123,7 @@ const ROWS: FileRow[] = [
     meta: "PDF · APPLICATION/PDF",
     context: "izdevums",
     contextLabel: "Uzņēmuma izdevums",
-    link: "FIN2026-0011",
+    link: "OO-2026-0011",
     uploader: "antonija",
     date: "01.05.2026 08:29",
     size: "146.66 KB",

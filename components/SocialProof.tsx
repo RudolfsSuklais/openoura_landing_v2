@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FadeUp } from "./FadeUp";
 
 export function SocialProof() {
@@ -14,23 +15,23 @@ export function SocialProof() {
         </FadeUp>
 
         <div className="grid grid-cols-12 gap-x-6 gap-y-12 items-start">
-          {/* photo placeholder, left */}
+          {/* client logo, left */}
           <FadeUp className="col-span-12 lg:col-span-5">
             <div
-              className="relative aspect-[4/5] w-full overflow-hidden rounded-md border hairline"
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-md border hairline bg-paper flex items-center justify-center p-10 md:p-14"
               style={{ transform: "rotate(-1deg)" }}
             >
-              <PhotoPlaceholder />
-              <div className="absolute left-4 bottom-4 mono text-[10px] text-paper/90 bg-ink/70 backdrop-blur px-2 py-1 rounded">
-                Finestra ražotne · Liepāja · 2025
+              <Image
+                src="/finestra_logo.png"
+                alt="Finestra Solution"
+                width={520}
+                height={260}
+                className="w-full h-auto max-h-[60%] object-contain"
+              />
+              <div className="absolute left-4 bottom-4 mono text-[10px] uppercase tracking-[0.18em] text-muted">
+                Finestra Solution · Liepāja · klients kopš 2025
               </div>
             </div>
-            <p
-              className="mt-4 serif-italic text-marker text-[15px]"
-              style={{ transform: "rotate(-1.5deg)" }}
-            >
-              ↑ īsta ražotne, nevis stoka foto
-            </p>
           </FadeUp>
 
           {/* quote, right */}
@@ -59,7 +60,7 @@ export function SocialProof() {
                 </div>
                 <div>
                   <div className="text-[15px] font-medium">Gatis</div>
-                  <div className="text-[13px] text-ash">Īpašnieks, SIA Finestra · 34 darbinieki</div>
+                  <div className="text-[13px] text-ash">Īpašnieks, SIA Finestra</div>
                 </div>
               </div>
             </FadeUp>
@@ -87,70 +88,3 @@ export function SocialProof() {
   );
 }
 
-function PhotoPlaceholder() {
-  // A composed SVG that suggests a workshop floor — not a stock photo, not 3D blobs.
-  return (
-    <svg
-      viewBox="0 0 400 500"
-      xmlns="http://www.w3.org/2000/svg"
-      className="absolute inset-0 h-full w-full"
-      preserveAspectRatio="xMidYMid slice"
-    >
-      <defs>
-        <linearGradient id="floor" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stopColor="#E8E4D7" />
-          <stop offset="0.55" stopColor="#D7CFB6" />
-          <stop offset="1" stopColor="#A89878" />
-        </linearGradient>
-        <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stopColor="#F2EEDF" />
-          <stop offset="1" stopColor="#DCD3B8" />
-        </linearGradient>
-      </defs>
-      <rect width="400" height="280" fill="url(#sky)" />
-      <rect y="280" width="400" height="220" fill="url(#floor)" />
-      {/* ceiling beams */}
-      {Array.from({ length: 7 }).map((_, i) => (
-        <rect key={i} x={i * 60 - 10} y="20" width="6" height="80" fill="#8a7a55" opacity="0.5" />
-      ))}
-      <rect x="0" y="100" width="400" height="6" fill="#a89878" opacity="0.5" />
-      {/* benches */}
-      <rect x="40" y="260" width="140" height="40" fill="#7e6a44" />
-      <rect x="44" y="300" width="6" height="60" fill="#5a4a2e" />
-      <rect x="170" y="300" width="6" height="60" fill="#5a4a2e" />
-
-      <rect x="220" y="290" width="150" height="30" fill="#8a754d" />
-      <rect x="226" y="320" width="6" height="50" fill="#5a4a2e" />
-      <rect x="360" y="320" width="6" height="50" fill="#5a4a2e" />
-
-      {/* boards on a bench */}
-      <rect x="50" y="248" width="120" height="12" fill="#c4a76b" />
-      <rect x="50" y="240" width="120" height="6" fill="#b29456" />
-
-      {/* worker silhouette */}
-      <g transform="translate(110 200)">
-        <circle r="14" cx="0" cy="0" fill="#3a3530" />
-        <rect x="-18" y="12" width="36" height="48" rx="6" fill="#5b5043" />
-        <rect x="-22" y="58" width="18" height="36" fill="#1f1c18" />
-        <rect x="4" y="58" width="18" height="36" fill="#1f1c18" />
-      </g>
-
-      {/* hanging lamp */}
-      <line x1="300" y1="20" x2="300" y2="100" stroke="#222" strokeWidth="1.5" />
-      <circle cx="300" cy="108" r="10" fill="#f2e2a8" />
-      <circle cx="300" cy="108" r="18" fill="#f2e2a8" opacity="0.2" />
-
-      {/* dust / atmosphere */}
-      {Array.from({ length: 40 }).map((_, i) => (
-        <circle
-          key={i}
-          cx={(i * 37) % 400}
-          cy={((i * 53) % 260) + 30}
-          r="0.8"
-          fill="#fff"
-          opacity={0.25}
-        />
-      ))}
-    </svg>
-  );
-}

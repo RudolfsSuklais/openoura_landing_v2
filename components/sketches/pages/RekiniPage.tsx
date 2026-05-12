@@ -29,7 +29,7 @@ type Row = {
 
 const ROWS: Row[] = [
   {
-    nr: "FIN2026-0024",
+    nr: "OO-2026-0024",
     type: "Avansa",
     date: "2026-05-11",
     recipient: 'SIA "Saules Stikls"',
@@ -38,7 +38,7 @@ const ROWS: Row[] = [
     total: "2 643.25 EUR",
   },
   {
-    nr: "FIN2026-0023",
+    nr: "OO-2026-0023",
     type: "Avansa",
     date: "2026-05-11",
     recipient: 'SIA "Baltā Egle"',
@@ -47,7 +47,7 @@ const ROWS: Row[] = [
     total: "1 146.11 EUR",
   },
   {
-    nr: "FIN2026-0022",
+    nr: "OO-2026-0022",
     type: "Avansa",
     date: "2026-05-10",
     recipient: "Egons Liepiņš IK",
@@ -56,7 +56,7 @@ const ROWS: Row[] = [
     total: "385.57 EUR",
   },
   {
-    nr: "FIN2026-0021",
+    nr: "OO-2026-0021",
     type: "Kredīts",
     date: "2026-05-09",
     recipient: 'SIA "Kurzemes Mēbeles"',
@@ -66,7 +66,7 @@ const ROWS: Row[] = [
     negative: true,
   },
   {
-    nr: "FIN2026-0020",
+    nr: "OO-2026-0020",
     type: "Avansa",
     date: "2026-05-09",
     recipient: 'AS "Vidzemes Logi"',

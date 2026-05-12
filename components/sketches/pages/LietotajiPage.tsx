@@ -80,7 +80,7 @@ const USERS: User[] = [
       { label: "Statu sagatavošana", color: "cyan" },
       { label: "Rīģeļu sagatavošana", color: "cyan" },
     ],
-    instrument: { label: "Quadra L-1", serial: "QL-1842" },
+    instrument: { label: "Hilti TE 6-A36", serial: "TE6-118429" },
     created: "2025-11-08 16:22:09",
   },
   {
