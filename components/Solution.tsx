@@ -1,6 +1,7 @@
 "use client";
 
 import { FadeUp } from "./FadeUp";
+import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { trackCtaClick } from "@/lib/analytics";
 import { useSectionView } from "./analytics/useSectionView";
 
@@ -59,6 +60,15 @@ export function Solution() {
             moduļi, kas atrisina konkrētas problēmas Latvijas ražotājiem —
             sākot ar pirmo dienu.
           </p>
+        </FadeUp>
+
+        {/* ═══════════════════════════════════════════════════════
+            BEFORE / AFTER — Excel chaos vs OpenOura clarity
+            ═══════════════════════════════════════════════════════ */}
+        <FadeUp delay={0.15}>
+          <div className="mt-20 md:mt-28">
+            <BeforeAfterSlider />
+          </div>
         </FadeUp>
 
         {/* ═══════════════════════════════════════════════════════
