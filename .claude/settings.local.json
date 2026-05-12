@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx next *)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"TSC_EXIT=$?\")",
+      "PowerShell(npx tsc --noEmit)",
+      "Bash(grep -E \"^\\(list-checks|pie-chart|file-code|sparkles|rotate-cw|arrow-left-right|edit-2|file-text|file-spreadsheet|book|info\\)\\\\.mjs$\")",
+      "Bash(grep -E \"^\\(folder-closed|folder-open|file-check|file-spreadsheet|file-text|image|list-checks|receipt|chevrons-up-down|download|trash-2|chevron-down|search|info|folder\\)\\\\.mjs$\")",
+      "Bash(grep -E \"^\\(boxes|rotate-cw|chevron-right|settings-2|clock\\)\\\\.mjs$\")",
+      "Bash(cd \"/c/Users/Rudolfs/Desktop/New folder \\(5\\)\" && cat package.json | grep -E '\"react\"|\"next\"' | head -5)",
+      "Read(//c/c/Users/Rudolfs/Desktop/New folder \\(5\\)/**)",
+      "Bash(npm run *)"
+    ]
+  }
+}
