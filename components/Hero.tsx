@@ -100,7 +100,10 @@ export function Hero() {
       </div>
 
       {/* ── PROJEKTI DASHBOARD BELOW TEXT, FULL WIDTH, SLIGHTLY TILTED ──────────── */}
-      <div className="mx-auto max-w-page px-6 md:px-10 mt-10 md:mt-14 lg:mt-16">
+      <div
+        id="dashboard"
+        className="mx-auto max-w-page px-6 md:px-10 mt-10 md:mt-14 lg:mt-16 scroll-mt-20 md:scroll-mt-24"
+      >
         <FadeUp delay={0.3}>
           <div className="relative rotate-0 md:rotate-[0.6deg] min-h-[700px] md:min-h-[800px]">
             <InteractiveDashboard />

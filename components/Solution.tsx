@@ -169,6 +169,7 @@ export function Solution() {
               body="Visi pasūtījumi vienā skatā. Velc-un-met starp posmiem. TV Display režīms ražotnē — darbinieki redz visus pasūtījumus un to statusus, bez datora un bez paroles."
               kpi="Finestra: 47 aktīvi pasūtījumi · atjaunoti reālajā laikā"
               delay={0.05}
+              dashboardPage="planotajs"
             >
               <KanbanSketch />
             </ModuleRow>
@@ -180,6 +181,7 @@ export function Solution() {
               body="Katrai precei materiālu saraksts. Sistēma rezervē materiālus, brīdina par trūkumiem. Beidzas vai nu materiāli, vai pārsteigumi piektdienas vakarā."
               kpi="2,400 SKU · 0 manuāli atjauninātas Excel rindas"
               delay={0.08}
+              dashboardPage="noliktava"
             >
               <BomSketch />
             </ModuleRow>
@@ -191,6 +193,7 @@ export function Solution() {
               body="Iemet PDF rēķinu sistēmā — AI nolasa piegādātāju, summu, materiālus, datumu. Ievades laiks: no 4 minūtēm uz 12 sekundēm. Bez kļūdām."
               kpi="3h 8min → 12 sek · vidēji 47 rēķini nedēļā"
               delay={0.1}
+              dashboardPage="pavadzimes"
             >
               <AiInvoiceSketch />
             </ModuleRow>
@@ -213,6 +216,7 @@ export function Solution() {
               body="Darbinieks planšetē atrod savu uzdevumu, nospiež „Start” un sāk strādāt. Vadītājs beidzot redz, par ko tiek maksāts un vai viss tiks pabeigts laikā."
               kpi="Reālas izmaksas par pasūtījumu · nevis vidējās"
               delay={0.14}
+              dashboardPage="monitorings"
             >
               <TimeSketch />
             </ModuleRow>
@@ -224,6 +228,7 @@ export function Solution() {
               body="Veido tāmi no BOM datiem un vidējām darba stundām. Pēc projekta beigām sistēma rāda starpību starp tāmi un reālajām izmaksām. Nākamā tāme būs precīzāka."
               kpi="Tāmes precizitāte uzlabojas ar katru pasūtījumu"
               delay={0.16}
+              dashboardPage="tames"
             >
               <EstimateSketch />
             </ModuleRow>
@@ -316,6 +321,7 @@ type ModuleRowProps = {
   kpi: string;
   delay?: number;
   last?: boolean;
+  dashboardPage?: string;
   children: React.ReactNode;
 };
 
@@ -326,8 +332,25 @@ function ModuleRow({
   kpi,
   delay = 0,
   last,
+  dashboardPage,
   children,
 }: ModuleRowProps) {
+  const openInDashboard = (e: React.MouseEvent) => {
+    if (!dashboardPage) return;
+    // Let the browser handle the smooth scroll to #dashboard via href,
+    // then dispatch the page-switch event a beat later so the
+    // InteractiveDashboard updates as the user lands on it.
+    if (typeof window !== "undefined") {
+      window.setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("openoura:show-page", { detail: { page: dashboardPage } }),
+        );
+      }, 50);
+    }
+    // Don't preventDefault — the anchor's smooth scroll is the UX.
+    void e;
+  };
+
   return (
     <FadeUp delay={delay} className="shrink-0 w-[88vw] md:w-auto snap-start">
       <div
@@ -353,6 +376,18 @@ function ModuleRow({
             <span className="inline-block h-px w-6 bg-ink/30 mt-2" />
             <span>{kpi}</span>
           </div>
+          {dashboardPage && (
+            <div className="mt-6 md:mt-7">
+              <a
+                href="#dashboard"
+                onClick={openInDashboard}
+                className="group inline-flex items-center gap-2 mono text-[11px] uppercase tracking-[0.18em] text-muted hover:text-ink transition-colors"
+              >
+                <span aria-hidden className="inline-block h-px w-6 bg-ink/30 group-hover:w-8 transition-all" />
+                <span>Skaties dashboard ↑</span>
+              </a>
+            </div>
+          )}
         </div>
 
         <div className="col-span-12 md:col-span-5">{children}</div>

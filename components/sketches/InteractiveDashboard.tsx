@@ -139,6 +139,27 @@ function flatLabel(page: Page): string {
   return "";
 }
 
+const VALID_PAGES: ReadonlySet<Page> = new Set([
+  "projekti",
+  "noliktava",
+  "pavadzimes",
+  "izdevumi",
+  "rekini",
+  "forma2",
+  "planotajs",
+  "monitorings",
+  "parskati",
+  "sutijumi-planotajs",
+  "komplektacijas",
+  "tames",
+  "lietotaji",
+  "faili",
+  "partneri",
+  "parvadataji",
+  "transports",
+  "instrumenti",
+]);
+
 export function InteractiveDashboard() {
   const [active, setActive] = useState<Page>("projekti");
   const [hintDismissed, setHintDismissed] = useState(false);
@@ -150,6 +171,22 @@ export function InteractiveDashboard() {
     setActive(page);
     setSidebarOpen(false);
   };
+
+  // Listen for external requests to switch the active page (e.g. Solution
+  // module rows linking down here). Fires through a custom window event so
+  // we don't need shared state across sections or URL coupling.
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ page?: string }>).detail;
+      const page = detail?.page;
+      if (page && VALID_PAGES.has(page as Page)) {
+        setActive(page as Page);
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener("openoura:show-page", handler);
+    return () => window.removeEventListener("openoura:show-page", handler);
+  }, []);
 
   // Lock background scroll while the mobile sidebar is open.
   useEffect(() => {
