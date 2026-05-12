@@ -28,9 +28,12 @@ function nextStage(s: Stage): Stage | null {
     : null;
 }
 
+const AUTOPLAY_INTERVAL_MS = 3200;
+
 export function OrderJourney() {
   const [stage, setStage] = useState<Stage>("gaida");
   const [revealed, setRevealed] = useState<Set<Stage>>(new Set(["gaida"]));
+  const [autoPlaying, setAutoPlaying] = useState(false);
   const liveRegionRef = useRef<HTMLSpanElement | null>(null);
 
   const advance = useCallback((to: Stage) => {
@@ -45,6 +48,7 @@ export function OrderJourney() {
   const reset = useCallback(() => {
     setStage("gaida");
     setRevealed(new Set(["gaida"]));
+    setAutoPlaying(false);
   }, []);
 
   // Announce stage transitions for screen readers.
@@ -56,6 +60,26 @@ export function OrderJourney() {
 
   const upcoming = nextStage(stage);
   const isDone = upcoming === null;
+
+  // Auto-play: advance to the next stage on a timer. Pause on completion.
+  useEffect(() => {
+    if (!autoPlaying) return;
+    if (!upcoming) {
+      setAutoPlaying(false);
+      return;
+    }
+    const id = window.setTimeout(() => advance(upcoming), AUTOPLAY_INTERVAL_MS);
+    return () => window.clearTimeout(id);
+  }, [autoPlaying, upcoming, advance]);
+
+  const toggleAutoPlay = useCallback(() => {
+    if (isDone) {
+      reset();
+      setAutoPlaying(true);
+      return;
+    }
+    setAutoPlaying((p) => !p);
+  }, [isDone, reset]);
 
   return (
     <section
@@ -94,9 +118,28 @@ export function OrderJourney() {
         {/* ── KANBAN ───────────────────────────────────────────── */}
         <FadeUp delay={0.15}>
           <div className="mt-16 md:mt-20 border hairline rounded-md bg-paper p-4 md:p-6">
-            <div className="mono text-[10px] uppercase tracking-[0.22em] text-muted mb-4 flex items-center justify-between">
-              <span>Ražošanas plānotājs · TV Display</span>
-              <span className="text-muted/60 hidden sm:inline">13.05 · 08:30</span>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <span className="mono text-[10px] uppercase tracking-[0.22em] text-muted truncate">
+                Ražošanas plānotājs · TV Display
+              </span>
+              <button
+                type="button"
+                onClick={toggleAutoPlay}
+                aria-pressed={autoPlaying}
+                aria-label={autoPlaying ? "Apturēt automātisko atskaņošanu" : "Skaties pats"}
+                className="inline-flex items-center gap-1.5 mono text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-ink hover:bg-ink/[0.04] active:scale-[0.97] border hairline rounded-full px-2.5 py-1 transition-colors shrink-0"
+              >
+                <span aria-hidden className="text-[12px] leading-none">
+                  {autoPlaying ? "⏸" : isDone ? "↻" : "▶"}
+                </span>
+                <span>
+                  {autoPlaying
+                    ? "Pauze"
+                    : isDone
+                    ? "Sākt no jauna"
+                    : "Skaties pats"}
+                </span>
+              </button>
             </div>
 
             <ol className="grid grid-cols-4 gap-2 md:gap-3" aria-label="Pasūtījuma stadijas">
@@ -110,7 +153,10 @@ export function OrderJourney() {
                     <button
                       type="button"
                       onClick={() => {
-                        if (isNext) advance(col.key);
+                        if (isNext) {
+                          setAutoPlaying(false);
+                          advance(col.key);
+                        }
                       }}
                       disabled={!isNext}
                       aria-current={isCurrent ? "step" : undefined}

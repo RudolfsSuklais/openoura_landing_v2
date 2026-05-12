@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FadeUp } from "./FadeUp";
+import { FinestraCounters } from "./FinestraCounters";
 
 export function SocialProof() {
   return (
@@ -78,6 +79,10 @@ export function SocialProof() {
                   </div>
                 ))}
               </div>
+            </FadeUp>
+
+            <FadeUp delay={0.32}>
+              <FinestraCounters />
             </FadeUp>
           </div>
         </div>
