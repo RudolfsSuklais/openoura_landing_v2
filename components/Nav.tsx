@@ -30,7 +30,7 @@ export function Nav() {
           <a href="#problema" className="hover:text-ink transition-colors">Problēma</a>
           <a href="#risinajums" className="hover:text-ink transition-colors">Risinājums</a>
           <a href="#cenas" className="hover:text-ink transition-colors">Cenas</a>
-          <a href="#kontakts" className="hover:text-ink transition-colors">Kontakti</a>
+          <a href="#demo" className="hover:text-ink transition-colors">Kontakti</a>
         </nav>
         <a
           href="#demo"
