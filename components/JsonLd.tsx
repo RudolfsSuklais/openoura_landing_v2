@@ -25,7 +25,7 @@ export function OrganizationSchema() {
     <Script
       id="org-schema"
       type="application/ld+json"
-      strategy="beforeInteractive"
+      strategy="afterInteractive"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   );
@@ -60,7 +60,7 @@ export function SoftwareApplicationSchema() {
     <Script
       id="software-schema"
       type="application/ld+json"
-      strategy="beforeInteractive"
+      strategy="afterInteractive"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   );

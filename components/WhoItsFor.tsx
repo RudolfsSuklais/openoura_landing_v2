@@ -1,5 +1,3 @@
-"use client";
-
 import { FadeUp } from "./FadeUp";
 
 const NOT_FOR = [
