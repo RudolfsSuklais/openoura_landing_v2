@@ -14,6 +14,7 @@ const LINKS = [
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -32,6 +33,42 @@ export function Nav() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const targets = LINKS
+      .map((l) => document.getElementById(l.href.slice(1)))
+      .filter((el): el is HTMLElement => el !== null);
+    if (targets.length === 0) return;
+
+    const visible = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            visible.set(entry.target.id, entry.boundingClientRect.top);
+          } else {
+            visible.delete(entry.target.id);
+          }
+        }
+        if (visible.size === 0) {
+          setActive(null);
+          return;
+        }
+        // Among visible sections, the one whose top is closest to (but
+        // not past) the top of the spy zone is the section the user is
+        // currently reading. That's the largest top value among entries.
+        const current = [...visible.entries()].sort(
+          ([, a], [, b]) => b - a,
+        )[0][0];
+        setActive(`#${current}`);
+      },
+      { rootMargin: "-80px 0px -85% 0px", threshold: 0 },
+    );
+
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -57,15 +94,27 @@ export function Nav() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-[14px] text-ash">
-            {LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="hover:text-ink transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+            {LINKS.map((link) => {
+              const isActive = active === link.href;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`relative transition-colors ${
+                    isActive ? "text-ink" : "hover:text-ink"
+                  }`}
+                >
+                  {link.label}
+                  <span
+                    aria-hidden
+                    className={`absolute left-0 right-0 -bottom-1 h-px bg-ink origin-left transition-transform duration-300 ease-out ${
+                      isActive ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                </a>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-3">
