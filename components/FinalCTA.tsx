@@ -142,7 +142,7 @@ export function FinalCTA() {
             </FadeUp>
 
             <FadeUp delay={0.15}>
-              <div className="mt-10 space-y-1.5">
+              <div id="kontakts" className="mt-10 space-y-1.5 scroll-mt-24">
                 <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted">
                   — Rudolfs · OpenOura dibinātājs
                 </div>
@@ -388,7 +388,7 @@ export function FinalCTA() {
                   </li>
                 </ul>
               </div>
-              <div id="kontakts">
+              <div>
                 <div className="mono text-[10px] uppercase tracking-[0.18em] text-muted mb-3">
                   Kontakti
                 </div>
