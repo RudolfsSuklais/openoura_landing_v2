@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FadeUp } from "./FadeUp";
 import { Stepper } from "./ui/Stepper";
+import { CurrentSetupMatrix } from "./CurrentSetupMatrix";
 import { trackCtaClick, type CtaLocation } from "@/lib/analytics";
 import { useSectionView } from "./analytics/useSectionView";
 
@@ -126,6 +127,13 @@ export function Pricing() {
             bez konsultantu rēķiniem, bez gada līgumiem. Tu zini, cik cilvēku
             tev strādā — izvēlies pats.
           </p>
+        </FadeUp>
+
+        {/* ── A.5 CURRENT SETUP MATRIX ─────────────────────────── */}
+        <FadeUp delay={0.13}>
+          <div className="mt-16 md:mt-24">
+            <CurrentSetupMatrix />
+          </div>
         </FadeUp>
 
         {/* ── B. ANTI-ERP CONTEXT BAR ───────────────────────────── */}

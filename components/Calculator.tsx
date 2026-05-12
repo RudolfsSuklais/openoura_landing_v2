@@ -1,11 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Stepper } from "./ui/Stepper";
 
 const FINESTRA_REDUCTION = 0.7;
 const WEEKS_PER_MONTH = 4.33;
 const OPENOURA_PRICE = 69;
+const SAVINGS_KEY = "openoura:projected_savings";
+const SAVINGS_EVENT = "openoura:savings-updated";
 
 function format(n: number) {
   return new Intl.NumberFormat("lv-LV", { maximumFractionDigits: 0 }).format(n);
@@ -44,6 +46,21 @@ export function Calculator() {
     const netEur = savedEur - OPENOURA_PRICE;
     return { savedHoursMonth, savedEur, netEur };
   }, [hours, rate]);
+
+  // Persist the visitor's projected net savings so the FinalCTA can
+  // greet them with their own number. sessionStorage scope keeps it
+  // private to the tab and per-visit.
+  useEffect(() => {
+    const value = Math.round(netEur);
+    try {
+      sessionStorage.setItem(SAVINGS_KEY, String(value));
+    } catch {
+      // Storage disabled (private mode, blocked) — silently skip.
+    }
+    window.dispatchEvent(
+      new CustomEvent(SAVINGS_EVENT, { detail: { value } }),
+    );
+  }, [netEur]);
 
   return (
     <div className="mt-28 md:mt-36 border-t hairline pt-16 md:pt-20">

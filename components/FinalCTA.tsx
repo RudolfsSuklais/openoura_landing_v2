@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { FormEvent, useRef, useState, useTransition } from "react";
+import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
 import { FadeUp } from "./FadeUp";
 import { demoRequestAction } from "@/app/actions/demo-request";
 import {
@@ -28,14 +28,43 @@ const INITIAL: FormState = {
   employees: "",
 };
 
+const SAVINGS_KEY = "openoura:projected_savings";
+const SAVINGS_EVENT = "openoura:savings-updated";
+
 export function FinalCTA() {
   const [form, setForm] = useState<FormState>(INITIAL);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState("");
   const [submitted, setSubmitted] = useState<FormState | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [projectedSavings, setProjectedSavings] = useState<number | null>(null);
   const formStartedRef = useRef(false);
   const sectionRef = useSectionView<HTMLElement>("viewed_demo_form");
+
+  // Read the visitor's calculator projection (if any) and listen for live
+  // updates while they're still on the page.
+  useEffect(() => {
+    const read = (raw: string | null) => {
+      if (!raw) return null;
+      const v = Number(raw);
+      return Number.isFinite(v) && v > 0 ? v : null;
+    };
+    try {
+      setProjectedSavings(read(sessionStorage.getItem(SAVINGS_KEY)));
+    } catch {
+      // ignore — storage unavailable
+    }
+    const onUpdate = (e: Event) => {
+      const detail = (e as CustomEvent<{ value: number }>).detail;
+      setProjectedSavings(
+        typeof detail?.value === "number" && detail.value > 0
+          ? detail.value
+          : null,
+      );
+    };
+    window.addEventListener(SAVINGS_EVENT, onUpdate);
+    return () => window.removeEventListener(SAVINGS_EVENT, onUpdate);
+  }, []);
 
   const fireFormStartedOnce = () => {
     if (formStartedRef.current) return;
@@ -184,6 +213,9 @@ export function FinalCTA() {
               />
             ) : (
               <FadeUp delay={0.2}>
+                {projectedSavings !== null && (
+                  <SavingsCallback amount={projectedSavings} />
+                )}
                 <form
                   onSubmit={handleSubmit}
                   noValidate={false}
@@ -433,6 +465,30 @@ export function FinalCTA() {
         08
       </div>
     </section>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────
+   SAVINGS CALLBACK — personalized greeting from Calculator
+   ─────────────────────────────────────────────────────────── */
+
+function SavingsCallback({ amount }: { amount: number }) {
+  const formatted = new Intl.NumberFormat("lv-LV", {
+    maximumFractionDigits: 0,
+  }).format(amount);
+  return (
+    <div className="mb-8 md:mb-10 -mt-2 border-l-2 border-violet pl-5 py-1">
+      <div className="mono text-[10px] uppercase tracking-[0.22em] text-muted mb-1.5">
+        No tava kalkulatora
+      </div>
+      <p className="text-[15px] md:text-[17px] leading-[1.4] text-ink">
+        Tu paredzēji ietaupīt{" "}
+        <span className="serif-italic gradient-text font-medium">
+          €{formatted}/mēn
+        </span>
+        . Pieprasi demo — redzēsim, vai tas der.
+      </p>
+    </div>
   );
 }
 
