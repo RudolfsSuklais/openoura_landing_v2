@@ -15,6 +15,7 @@ const LINKS = [
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (!open) return;
@@ -33,6 +34,32 @@ export function Nav() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let raf = 0;
+    const measure = () => {
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+      setProgress(Math.min(100, Math.max(0, pct)));
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        measure();
+      });
+    };
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", measure);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
@@ -73,6 +100,15 @@ export function Nav() {
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-paper/85 backdrop-blur-md border-b hairline">
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-px overflow-hidden pointer-events-none"
+        >
+          <div
+            className="h-full gradient-bg origin-left transition-transform duration-150 ease-out"
+            style={{ transform: `scaleX(${progress / 100})` }}
+          />
+        </div>
         <div className="mx-auto max-w-page px-6 md:px-10 py-3 md:py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
             <Image
