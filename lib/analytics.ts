@@ -10,7 +10,8 @@ export type CtaLocation =
   | "pricing_sakums"
   | "pricing_cehs"
   | "pricing_razotne"
-  | "journey_pabeigts";
+  | "journey_pabeigts"
+  | "sticky_mobile";
 
 export function trackCtaClick(location: CtaLocation) {
   if (typeof window === "undefined") return;
@@ -61,7 +62,7 @@ export function trackFormError(
 }
 
 export function trackWhatsAppClick(props: {
-  location: "floating_button";
+  location: "floating_button" | "hero" | "sticky_mobile";
   scroll_position: number;
 }) {
   try {

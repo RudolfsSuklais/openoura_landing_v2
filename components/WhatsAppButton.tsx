@@ -112,12 +112,11 @@ export function WhatsAppButton() {
       aria-hidden={isHidden || undefined}
       tabIndex={isHidden ? -1 : 0}
       className={[
-        "group fixed z-50",
-        // Safe-area-aware positioning so we clear the iOS home indicator
-        // (≈21–34px tall) on notched iPhones.
-        "bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))]",
+        // Mobile is owned by the StickyMobileCTA bar (which contains its
+        // own WhatsApp icon). Floating button is desktop-only.
+        "hidden md:inline-flex group fixed z-50",
         "md:bottom-[max(1.5rem,env(safe-area-inset-bottom))] md:right-[max(1.5rem,env(safe-area-inset-right))]",
-        "inline-flex items-center justify-center gap-3",
+        "items-center justify-center gap-3",
         "bg-ink text-paper",
         "rounded-full",
         "shadow-[0_8px_24px_rgba(10,10,10,0.12)]",

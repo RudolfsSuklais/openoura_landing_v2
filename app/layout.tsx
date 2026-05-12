@@ -4,6 +4,7 @@ import "./globals.css";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { OrganizationSchema, SoftwareApplicationSchema } from "@/components/JsonLd";
 
 const instrumentSerif = Instrument_Serif({
@@ -119,6 +120,7 @@ export default function RootLayout({
           {children}
         </PostHogProvider>
         <WhatsAppButton />
+        <StickyMobileCTA />
         <div className="grain" aria-hidden />
       </body>
     </html>

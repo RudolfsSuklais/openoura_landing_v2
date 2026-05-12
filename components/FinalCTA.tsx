@@ -141,6 +141,15 @@ export function FinalCTA() {
               </p>
             </FadeUp>
 
+            <FadeUp delay={0.12}>
+              <ol className="mt-12 md:mt-14 max-w-[42ch] border-t hairline divide-y hairline">
+                <NextStepRow num="01" label="Es atbildu 4 stundu laikā" />
+                <NextStepRow num="02" label="25 min · WhatsApp vai Zoom" />
+                <NextStepRow num="03" label="Bez slaidiem · tikai tavi jautājumi" />
+                <NextStepRow num="04" label="Ja neder, es to pasaku" />
+              </ol>
+            </FadeUp>
+
             <FadeUp delay={0.15}>
               <div id="kontakts" className="mt-10 space-y-1.5 scroll-mt-24">
                 <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted">
@@ -424,6 +433,23 @@ export function FinalCTA() {
         08
       </div>
     </section>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────
+   NEXT STEP ROW — "Kas notiks pēc tam" strip
+   ─────────────────────────────────────────────────────────── */
+
+function NextStepRow({ num, label }: { num: string; label: string }) {
+  return (
+    <li className="flex items-baseline gap-4 py-3.5 md:py-4">
+      <span className="mono tabular-nums text-[11px] uppercase tracking-[0.18em] text-muted/70 shrink-0 w-6">
+        {num}
+      </span>
+      <span className="text-[14px] md:text-[15px] leading-[1.4] text-ink">
+        {label}
+      </span>
+    </li>
   );
 }
 

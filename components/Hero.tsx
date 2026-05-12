@@ -4,7 +4,8 @@ import dynamic from "next/dynamic";
 import { FadeUp } from "./FadeUp";
 import { DashboardSkeleton } from "./sketches/DashboardSkeleton";
 import { LiveTicker } from "./LiveTicker";
-import { trackCtaClick } from "@/lib/analytics";
+import { trackCtaClick, trackWhatsAppClick } from "@/lib/analytics";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const InteractiveDashboard = dynamic(
   () =>
@@ -56,16 +57,19 @@ export function Hero() {
 
         <FadeUp delay={0.25}>
           <div className="mt-10">
-            <a
-              href="#demo"
-              onClick={() => trackCtaClick("hero")}
-              className="group inline-flex items-center justify-center gap-2 bg-ink text-paper px-5 py-3.5 rounded-full text-[14px] font-medium tracking-tight hover:opacity-90 transition-opacity"
-            >
-              Pieprasi demo
-              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
-            </a>
-            <div className="mt-3 mono text-[11px] uppercase tracking-[0.15em] text-muted">
-              25 min · bez maksas · bez saistībām · WhatsApp vai e-pasts
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+              <a
+                href="#demo"
+                onClick={() => trackCtaClick("hero")}
+                className="group inline-flex items-center justify-center gap-2 bg-ink text-paper px-5 py-3.5 rounded-full text-[14px] font-medium tracking-tight hover:opacity-90 transition-opacity self-start"
+              >
+                Pieprasi demo
+                <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+              </a>
+              <HeroWhatsAppLink />
+            </div>
+            <div className="mt-4 mono text-[11px] uppercase tracking-[0.15em] text-muted">
+              25 min · bez maksas · bez saistībām
             </div>
           </div>
         </FadeUp>
@@ -126,5 +130,29 @@ export function Hero() {
         </FadeUp>
       </div>
     </section>
+  );
+}
+
+function HeroWhatsAppLink() {
+  const url = getWhatsAppUrl();
+  if (!url) return null;
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() =>
+        trackWhatsAppClick({ location: "hero", scroll_position: 0 })
+      }
+      className="group inline-flex items-baseline gap-2 text-[14px] text-ash hover:text-ink transition-colors self-start"
+    >
+      <span>Vai vienkārši uzraksti</span>
+      <span className="font-medium text-ink underline decoration-ink/30 underline-offset-4 group-hover:decoration-ink transition">
+        WhatsApp
+      </span>
+      <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+        →
+      </span>
+    </a>
   );
 }
