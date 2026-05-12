@@ -37,7 +37,7 @@ export function Problem() {
     <section
       ref={sectionRef}
       id="problema"
-      className="relative pt-32 md:pt-48 lg:pt-56 pb-32 md:pb-40 border-t hairline"
+      className="relative pt-32 md:pt-48 lg:pt-56 pb-32 md:pb-40 border-t hairline scroll-mt-20 md:scroll-mt-24"
     >
       <div className="mx-auto max-w-page px-6 md:px-10">
         {/* framing note — quotes are illustrative, not verified testimonials */}

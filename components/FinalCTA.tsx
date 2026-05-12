@@ -106,7 +106,7 @@ export function FinalCTA() {
     <section
       ref={sectionRef}
       id="demo"
-      className="relative pt-32 md:pt-48 pb-32 md:pb-56 border-t hairline overflow-hidden"
+      className="relative pt-32 md:pt-48 pb-32 md:pb-56 border-t hairline overflow-hidden scroll-mt-20 md:scroll-mt-24"
       aria-labelledby="demo-heading"
     >
       <div className="mx-auto max-w-page px-6 md:px-10">
@@ -154,7 +154,6 @@ export function FinalCTA() {
                     rudolfs@openoura.com
                   </a>
                 </div>
-                {/* TODO: Replace with Rudolfs's real phone number before launch */}
                 <div className="text-[12px] text-ash">
                   <a
                     href="tel:+37120510502"
@@ -402,7 +401,6 @@ export function FinalCTA() {
                     </a>
                   </li>
                   <li>
-                    {/* TODO: replace with Rudolfs's real phone */}
                     <a className="hover:text-ash" href="tel:+37120510502">
                       +371 20 510 502
                     </a>

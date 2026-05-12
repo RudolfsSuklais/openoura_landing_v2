@@ -22,7 +22,7 @@ const PLANS: Plan[] = [
     key: "starter",
     label: "Mazam uzņēmumam",
     name: "Starter",
-    cta: "14 dienu izmēģinājums",
+    cta: "Pieprasi demo",
     price: 69,
     audience: "Mazākiem ražotājiem · līdz 10 lietotājiem",
     roi: "Atpelnās aptuveni 14 stundu ietaupījumā mēnesī.",
@@ -41,7 +41,7 @@ const PLANS: Plan[] = [
     key: "professional",
     label: "Populārākais",
     name: "Professional",
-    cta: "14 dienu izmēģinājums",
+    cta: "Pieprasi demo",
     price: 199,
     audience: "Augošiem uzņēmumiem · līdz 30 lietotājiem",
     roi: "Atpelnās ar plānotāju un reāllaika monitoringu.",
@@ -86,7 +86,7 @@ export function Pricing() {
     <section
       ref={sectionRef}
       id="cenas"
-      className="relative pt-32 md:pt-48 lg:pt-56 pb-32 md:pb-40 border-t hairline"
+      className="relative pt-32 md:pt-48 lg:pt-56 pb-32 md:pb-40 border-t hairline scroll-mt-20 md:scroll-mt-24"
       aria-labelledby="pricing-heading"
     >
       <div className="mx-auto max-w-page px-6 md:px-10">
@@ -148,12 +148,12 @@ export function Pricing() {
           <div className="mt-24 md:mt-32 mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-muted">
             <span className="inline-flex items-center gap-1.5">
               <span aria-hidden className="text-violet-500">✓</span>
-              Bez kredītkartes
+              Bez ieviešanas izmaksām
             </span>
             <span aria-hidden className="inline-block h-3 w-px bg-ink/15" />
             <span className="inline-flex items-center gap-1.5">
               <span aria-hidden className="text-violet-500">✓</span>
-              Bez saistībām
+              Bez gada līgumiem
             </span>
             <span aria-hidden className="inline-block h-3 w-px bg-ink/15" />
             <span className="inline-flex items-center gap-1.5">
@@ -177,7 +177,7 @@ export function Pricing() {
           <div className="mt-24 md:mt-32">
             <div className="border-t hairline" />
             <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted text-center pt-6 leading-relaxed">
-              Bez gada līgumiem  ·  Atcel jebkurā brīdī  ·  14 dienas bezmaksas
+              Bez gada līgumiem  ·  Atcel jebkurā brīdī  ·  25 min demo · WhatsApp vai e-pasts
             </div>
           </div>
         </FadeUp>

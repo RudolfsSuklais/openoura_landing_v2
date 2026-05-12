@@ -190,8 +190,8 @@ Use ONCE per section maximum.
 ═══════════════════════════════════════════════════════════════════
 
 ### Real customers (use for social proof)
-- Finestra Solutions (Liepāja) — window/door manufacturer, primary 
-  reference customer
+- Finestra Solution (Liepāja) — window/door manufacturer, primary 
+  reference customer (legal entity: SIA Finestra)
 - [Add more as Rudolfs gets permissions]
 
 ### Real product modules
@@ -247,8 +247,9 @@ not all at once. Mix and match per section.
    used between major content blocks
 
 7. **Snake_case section numbers** — every major section numbered 
-   in eyebrow: 01 (Manifests), 02 (Problēma), 03 (Risinājums), 
-   04 (Cenas), 05 (Klienti), 06 (Sākt)
+   in eyebrow: 01 (Manifests / Hero), 02 (Problēma), 03 (Risinājums), 
+   04 (Skaitļi / Numbers), 05 (Brutāls godīgums / WhoItsFor), 
+   06 (Klients / SocialProof), 07 (Cenas / Pricing), 08 (Sākums / FinalCTA)
 
 ═══════════════════════════════════════════════════════════════════
 ## 10. ANIMATION RULES
@@ -290,15 +291,19 @@ layout.tsx          # Film grain overlay lives here
 page.tsx            # Composes sections
 globals.css         # Custom CSS vars + gradient classes
 components/
-Nav.tsx
+Nav.tsx             # Sticky header + mobile fullscreen menu
 Hero.tsx            # Section 01 — Manifests
 Problem.tsx         # Section 02 — Problēma
 Solution.tsx        # Section 03 — Risinājums
-Pricing.tsx         # Section 04 — Cenas
-SocialProof.tsx     # Section 05 — Klienti
-FinalCTA.tsx        # Section 06 — Sākt
+Numbers.tsx         # Section 04 — Skaitļi
+WhoItsFor.tsx       # Section 05 — Brutāls godīgums
+SocialProof.tsx     # Section 06 — Klients
+Pricing.tsx         # Section 07 — Cenas
+FinalCTA.tsx        # Section 08 — Sākums (contact + demo form)
 FadeUp.tsx          # Animation wrapper
 ProductSketch.tsx   # Reusable product mockup
+WhatsAppButton.tsx  # Floating CTA (hides over #demo)
+JsonLd.tsx          # Organization + SoftwareApplication schemas
 
 ═══════════════════════════════════════════════════════════════════
 ## 12. WHEN BUILDING A NEW SECTION
