@@ -158,7 +158,7 @@ export function CurrentSetupMatrix() {
             </div>
             {monthlyEur > OPENOURA_PRICE && (
               <div className="mt-2 mono text-[11px] uppercase tracking-[0.16em] text-ink">
-                Tu paliek ar ~€{formatEur(monthlyEur - OPENOURA_PRICE)}/mēn
+                Tu paliec ar ~€{formatEur(monthlyEur - OPENOURA_PRICE)}/mēn
               </div>
             )}
           </div>
