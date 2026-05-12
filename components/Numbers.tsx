@@ -1,4 +1,5 @@
 import { FadeUp } from "./FadeUp";
+import { Calculator } from "./Calculator";
 
 const STATS = [
   {
@@ -71,6 +72,10 @@ export function Numbers() {
             </FadeUp>
           ))}
         </div>
+
+        <FadeUp>
+          <Calculator />
+        </FadeUp>
       </div>
     </section>
   );

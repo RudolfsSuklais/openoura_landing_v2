@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { FadeUp } from "./FadeUp";
 import { DashboardSkeleton } from "./sketches/DashboardSkeleton";
+import { LiveTicker } from "./LiveTicker";
 import { trackCtaClick } from "@/lib/analytics";
 
 const InteractiveDashboard = dynamic(
@@ -91,8 +92,15 @@ export function Hero() {
         </FadeUp>
       </div>
 
+      {/* ── LIVE TICKER — Finestra activity sample, ties social proof to dashboard ── */}
+      <div className="mx-auto max-w-page px-6 md:px-10 mt-12 md:mt-16">
+        <FadeUp delay={0.45}>
+          <LiveTicker />
+        </FadeUp>
+      </div>
+
       {/* ── PROJEKTI DASHBOARD BELOW TEXT, FULL WIDTH, SLIGHTLY TILTED ──────────── */}
-      <div className="mx-auto max-w-page px-6 md:px-10 mt-20 md:mt-28 lg:mt-32">
+      <div className="mx-auto max-w-page px-6 md:px-10 mt-10 md:mt-14 lg:mt-16">
         <FadeUp delay={0.3}>
           <div className="relative rotate-0 md:rotate-[0.6deg] min-h-[700px] md:min-h-[800px]">
             <InteractiveDashboard />
