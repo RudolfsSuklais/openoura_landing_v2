@@ -99,13 +99,12 @@ export function OrderJourney() {
               <span className="text-muted/60 hidden sm:inline">13.05 · 08:30</span>
             </div>
 
-            <ol className="grid grid-cols-4 gap-1.5 md:gap-2.5" aria-label="Pasūtījuma stadijas">
-              {ORDER.STAGES.map((col) => {
+            <ol className="grid grid-cols-4 gap-2 md:gap-3" aria-label="Pasūtījuma stadijas">
+              {ORDER.STAGES.map((col, idx) => {
                 const isCurrent = col.key === stage;
                 const isNext = col.key === upcoming;
                 const isPast =
-                  ORDER.STAGES.findIndex((s) => s.key === col.key) <
-                  ORDER.STAGES.findIndex((s) => s.key === stage);
+                  idx < ORDER.STAGES.findIndex((s) => s.key === stage);
                 return (
                   <li key={col.key} className="min-w-0">
                     <button
@@ -115,28 +114,72 @@ export function OrderJourney() {
                       }}
                       disabled={!isNext}
                       aria-current={isCurrent ? "step" : undefined}
-                      aria-label={`Pārvietot uz ${col.label}`}
-                      className={`group relative w-full text-left rounded-[3px] px-2 md:px-3 py-3 md:py-4 border transition-all duration-200 ${
+                      aria-label={
+                        isNext
+                          ? `Pārvietot uz ${col.label}`
+                          : `${col.label} · ${
+                              isCurrent ? "tagad" : isPast ? "pabeigts" : "vēl nepieejams"
+                            }`
+                      }
+                      className={`group relative w-full text-left rounded-md px-2 md:px-3 py-3 md:py-4 transition-all duration-200 ${
                         isCurrent
-                          ? "border-ink/40 bg-paper"
+                          ? "border-2 border-ink bg-paper shadow-[0_3px_0_0_rgba(10,10,10,0.06)]"
                           : isNext
-                          ? "border-dashed border-ink/40 hover:border-ink hover:bg-ink/[0.02] cursor-pointer"
+                          ? "border-2 border-dashed border-violet bg-violet/[0.06] hover:bg-violet/[0.12] hover:border-solid cursor-pointer"
                           : isPast
-                          ? "border-ink/10 bg-ink/[0.02] opacity-60"
-                          : "border-ink/10 bg-paper opacity-40 cursor-not-allowed"
+                          ? "border border-ink/15 bg-ink/[0.03]"
+                          : "border border-ink/10 bg-paper opacity-40 cursor-not-allowed"
                       }`}
                     >
-                      <div className="mono text-[9px] md:text-[10px] uppercase tracking-[0.16em] text-muted truncate">
-                        <span className="sm:hidden">{col.short}</span>
-                        <span className="hidden sm:inline">{col.label}</span>
+                      <div className="flex items-center justify-between gap-2 mb-3 md:mb-4">
+                        <span
+                          className={`mono text-[10px] md:text-[11px] uppercase tracking-[0.18em] truncate ${
+                            isCurrent
+                              ? "text-ink font-semibold"
+                              : isNext
+                              ? "text-violet font-semibold"
+                              : "text-muted"
+                          }`}
+                        >
+                          <span className="sm:hidden">{col.short}</span>
+                          <span className="hidden sm:inline">{col.label}</span>
+                        </span>
+                        {isCurrent && (
+                          <span className="mono text-[9px] uppercase tracking-[0.14em] bg-ink text-paper px-1.5 py-0.5 rounded-full shrink-0">
+                            Tagad
+                          </span>
+                        )}
+                        {isPast && (
+                          <span
+                            aria-hidden
+                            className="mono text-[13px] leading-none text-ink/45 shrink-0"
+                          >
+                            ✓
+                          </span>
+                        )}
                       </div>
 
-                      <div className="mt-3 md:mt-4 min-h-[68px] md:min-h-[88px] flex flex-col justify-end">
+                      <div className="min-h-[68px] md:min-h-[88px] flex flex-col justify-end">
                         {isCurrent && <OrderCard />}
                         {isNext && (
-                          <div className="mono text-[9px] md:text-[10px] uppercase tracking-[0.18em] text-ink/50 group-hover:text-ink transition-colors flex items-center gap-1.5">
-                            <span aria-hidden>→</span>
+                          <div className="flex items-center gap-1.5 md:gap-2 mono text-[11px] md:text-[12px] uppercase tracking-[0.14em] text-violet font-semibold">
+                            <span aria-hidden className="motion-safe:animate-pulse">
+                              →
+                            </span>
                             <span>Klikšķini</span>
+                          </div>
+                        )}
+                        {isPast && (
+                          <div className="mono text-[10px] md:text-[11px] uppercase tracking-[0.14em] text-muted/70">
+                            Pabeigts
+                          </div>
+                        )}
+                        {!isCurrent && !isNext && !isPast && (
+                          <div
+                            aria-hidden
+                            className="mono text-[14px] text-muted/30"
+                          >
+                            ·
                           </div>
                         )}
                       </div>
@@ -146,11 +189,24 @@ export function OrderJourney() {
               })}
             </ol>
 
-            <div className="mt-4 pt-3 border-t hairline mono text-[10px] uppercase tracking-[0.14em] text-muted flex items-center justify-between">
-              <span>1 aktīvs · 46 pārējie</span>
-              <span className="text-ink">
-                {isDone ? "Pabeigts · sākt no jauna ↓" : "Klikšķini nākamo kolonnu →"}
-              </span>
+            <div className="mt-5 pt-4 border-t hairline flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 mono text-[11px] md:text-[12px] uppercase tracking-[0.16em]">
+              <span className="text-muted">1 aktīvs · 46 pārējie</span>
+              {isDone ? (
+                <span className="text-ink font-semibold">
+                  Pabeigts · sākt no jauna ↓
+                </span>
+              ) : (
+                <span>
+                  <span className="text-muted">Stadija</span>{" "}
+                  <span className="text-ink font-semibold">
+                    {ORDER.STAGES.findIndex((s) => s.key === stage) + 1}/4
+                  </span>
+                  <span aria-hidden className="mx-2 text-muted/40">·</span>
+                  <span className="text-violet font-semibold">
+                    Klikšķini violet kolonnu →
+                  </span>
+                </span>
+              )}
             </div>
 
             <span ref={liveRegionRef} role="status" aria-live="polite" className="sr-only" />

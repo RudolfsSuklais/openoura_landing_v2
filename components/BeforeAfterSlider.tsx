@@ -49,8 +49,10 @@ const EXCEL_ROWS: Array<{
 
 export function BeforeAfterSlider() {
   const [position, setPosition] = useState(50);
+  const [hintVisible, setHintVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
+  const hintTimerRef = useRef<number | null>(null);
 
   const updateFromClientX = useCallback((clientX: number) => {
     const el = containerRef.current;
@@ -60,10 +62,19 @@ export function BeforeAfterSlider() {
     setPosition(Math.min(100, Math.max(0, pct)));
   }, []);
 
+  const dismissHint = useCallback(() => {
+    setHintVisible(false);
+    if (hintTimerRef.current) {
+      window.clearTimeout(hintTimerRef.current);
+      hintTimerRef.current = null;
+    }
+  }, []);
+
   const onPointerDown = (e: React.PointerEvent) => {
     draggingRef.current = true;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     updateFromClientX(e.clientX);
+    dismissHint();
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
@@ -98,19 +109,32 @@ export function BeforeAfterSlider() {
     if (typeof IntersectionObserver === "undefined") return;
     const el = containerRef.current;
     if (!el) return;
+    const reduceMotion =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasNudged) {
           setHasNudged(true);
-          setTimeout(() => setPosition(65), 700);
-          setTimeout(() => setPosition(35), 1500);
-          setTimeout(() => setPosition(50), 2300);
+          if (!reduceMotion) {
+            setTimeout(() => setPosition(65), 700);
+            setTimeout(() => setPosition(35), 1500);
+            setTimeout(() => setPosition(50), 2300);
+          }
+          // Show the "← Velc →" hint label and auto-hide after 3.5s
+          setHintVisible(true);
+          hintTimerRef.current = window.setTimeout(() => {
+            setHintVisible(false);
+            hintTimerRef.current = null;
+          }, 3500);
         }
       },
       { threshold: 0.4 },
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (hintTimerRef.current) window.clearTimeout(hintTimerRef.current);
+    };
   }, [hasNudged]);
 
   return (
@@ -144,19 +168,31 @@ export function BeforeAfterSlider() {
 
         <div
           aria-hidden
-          className="absolute top-0 bottom-0 w-px bg-ink/80 pointer-events-none"
+          className="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none"
           style={{ left: `${position}%` }}
         />
+
+        {/* Floating "← Velc →" hint, fades out on first interaction or 3.5s */}
+        <div
+          aria-hidden
+          className={`absolute top-[calc(50%-44px)] -translate-x-1/2 mono text-[11px] uppercase tracking-[0.16em] bg-ink text-paper px-2.5 py-1 rounded-full shadow-lg transition-opacity duration-500 pointer-events-none ${
+            hintVisible ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ left: `${position}%` }}
+        >
+          ← Velc →
+        </div>
+
         <button
           type="button"
           aria-hidden
           tabIndex={-1}
-          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-11 w-11 rounded-full bg-ink text-paper shadow-[0_8px_24px_rgba(10,10,10,0.25)] flex items-center justify-center transition-transform duration-150 hover:scale-105 active:scale-95"
+          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-paper border-2 border-ink shadow-[0_8px_24px_rgba(10,10,10,0.3)] flex items-center justify-center gap-[3px] transition-transform duration-150 hover:scale-105 active:scale-95"
           style={{ left: `${position}%` }}
         >
-          <span aria-hidden className="mono text-[12px] tracking-tight">
-            ‹ ›
-          </span>
+          <span aria-hidden className="block w-[2px] h-4 md:h-5 bg-ink rounded-full" />
+          <span aria-hidden className="block w-[2px] h-4 md:h-5 bg-ink rounded-full" />
+          <span aria-hidden className="block w-[2px] h-4 md:h-5 bg-ink rounded-full" />
         </button>
 
         <div className="absolute top-3 left-3 md:top-4 md:left-5 mono text-[10px] uppercase tracking-[0.22em] text-ink/80 bg-paper/85 backdrop-blur-sm rounded-[2px] px-2 py-1 pointer-events-none z-10">
@@ -167,9 +203,14 @@ export function BeforeAfterSlider() {
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between mono text-[10px] uppercase tracking-[0.18em] text-muted">
-        <span>Velc, lai salīdzinātu</span>
-        <span className="hidden sm:inline">Tā pati informācija · divas pasaules</span>
+      <div className="mt-4 flex items-center justify-between mono text-[12px] md:text-[13px] uppercase tracking-[0.16em] text-muted gap-3">
+        <span className="flex items-center gap-2 text-ink">
+          <span aria-hidden className="text-[14px] leading-none">↔</span>
+          <span className="font-semibold">Velc, lai salīdzinātu</span>
+        </span>
+        <span className="hidden sm:inline text-muted/80">
+          Tā pati informācija · divas pasaules
+        </span>
       </div>
     </div>
   );

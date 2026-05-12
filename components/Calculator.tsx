@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Stepper } from "./ui/Stepper";
 
 const FINESTRA_REDUCTION = 0.7;
 const WEEKS_PER_MONTH = 4.33;
@@ -10,56 +11,25 @@ function format(n: number) {
   return new Intl.NumberFormat("lv-LV", { maximumFractionDigits: 0 }).format(n);
 }
 
-type StepperProps = {
+type FieldProps = {
   label: string;
-  suffix: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-  onChange: (v: number) => void;
+  hint?: string;
+  children: React.ReactNode;
 };
 
-function Stepper({ label, suffix, value, min, max, step, onChange }: StepperProps) {
-  const clamp = (v: number) => Math.min(max, Math.max(min, v));
+function StepperField({ label, hint, children }: FieldProps) {
   return (
-    <div className="border-t hairline py-6 md:py-7 flex items-baseline justify-between gap-6">
-      <div className="flex-1 min-w-0">
-        <label className="block mono text-[11px] uppercase tracking-[0.18em] text-muted mb-2">
-          {label}
-        </label>
-        <div className="flex items-baseline gap-3">
-          <button
-            type="button"
-            onClick={() => onChange(clamp(value - step))}
-            aria-label="Mazāk"
-            className="mono text-[18px] text-muted hover:text-ink transition-colors w-6 h-6 flex items-center justify-center"
-          >
-            −
-          </button>
-          <input
-            type="number"
-            value={value}
-            min={min}
-            max={max}
-            step={step}
-            onChange={(e) => {
-              const next = Number(e.target.value);
-              if (Number.isFinite(next)) onChange(clamp(next));
-            }}
-            className="mono tabular-nums text-[2.5rem] md:text-[3rem] leading-none tracking-[-0.03em] text-ink bg-transparent border-0 focus:outline-none w-[5ch] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-          />
-          <span className="mono text-[13px] text-muted">{suffix}</span>
-          <button
-            type="button"
-            onClick={() => onChange(clamp(value + step))}
-            aria-label="Vairāk"
-            className="mono text-[18px] text-muted hover:text-ink transition-colors w-6 h-6 flex items-center justify-center ml-2"
-          >
-            +
-          </button>
-        </div>
-      </div>
+    <div className="border-t hairline py-7 md:py-8">
+      <label className="flex items-center gap-2.5 mono text-[12px] md:text-[13px] uppercase tracking-[0.18em] text-muted mb-4">
+        <span aria-hidden className="inline-block h-px w-5 bg-ink/30" />
+        <span>{label}</span>
+      </label>
+      {children}
+      {hint && (
+        <p className="mt-3 mono text-[11px] uppercase tracking-[0.16em] text-muted/70">
+          {hint}
+        </p>
+      )}
     </div>
   );
 }
@@ -93,25 +63,29 @@ export function Calculator() {
       <div className="mt-12 md:mt-14 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-12">
         {/* INPUTS — left */}
         <div className="lg:col-span-5">
-          <Stepper
-            label="Stundas nedēļā uz Excel un pavadzīmēm"
-            suffix="h / ned."
-            value={hours}
-            min={1}
-            max={60}
-            step={1}
-            onChange={setHours}
-          />
-          <Stepper
-            label="Vidējās izmaksas par stundu (alga + nodokļi)"
-            suffix="€ / h"
-            value={rate}
-            min={5}
-            max={50}
-            step={1}
-            onChange={setRate}
-          />
-          <div className="border-t hairline pt-5 mono text-[10px] uppercase tracking-[0.18em] text-muted/80">
+          <StepperField label="Stundas nedēļā uz Excel un pavadzīmēm">
+            <Stepper
+              value={hours}
+              min={1}
+              max={60}
+              step={1}
+              suffix="h / ned."
+              ariaLabel="Stundas nedēļā"
+              onChange={setHours}
+            />
+          </StepperField>
+          <StepperField label="Vidējās izmaksas par stundu · alga + nodokļi">
+            <Stepper
+              value={rate}
+              min={5}
+              max={50}
+              step={1}
+              suffix="€ / h"
+              ariaLabel="Stundu likme"
+              onChange={setRate}
+            />
+          </StepperField>
+          <div className="border-t hairline pt-6 mono text-[12px] uppercase tracking-[0.16em] text-muted/80 leading-relaxed">
             Pielāgo skaitļus savai realitātei. Mēs neredzam, ko tu ievadi.
           </div>
         </div>

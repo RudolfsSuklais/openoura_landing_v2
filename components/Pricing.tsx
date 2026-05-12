@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FadeUp } from "./FadeUp";
+import { Stepper } from "./ui/Stepper";
 import { trackCtaClick, type CtaLocation } from "@/lib/analytics";
 import { useSectionView } from "./analytics/useSectionView";
 
@@ -298,58 +299,46 @@ function PlanRecommender({
   onChange: (n: number) => void;
   recommended: Plan;
 }) {
-  const clamp = (n: number) => Math.min(150, Math.max(1, n));
   return (
     <div className="mb-6 md:mb-8 border-y hairline">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 md:gap-8 py-5 md:py-6">
-        <div className="flex items-baseline gap-4 md:gap-5">
-          <label className="mono text-[11px] uppercase tracking-[0.18em] text-muted shrink-0">
-            Tavā uzņēmumā strādā
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-10 py-7 md:py-8">
+        <div className="flex flex-col gap-3">
+          <label className="flex items-center gap-2.5 mono text-[12px] md:text-[13px] uppercase tracking-[0.18em] text-muted">
+            <span aria-hidden className="inline-block h-px w-5 bg-ink/30" />
+            <span>Tavā uzņēmumā strādā</span>
           </label>
-          <div className="flex items-baseline gap-2">
-            <button
-              type="button"
-              onClick={() => onChange(clamp(employees - 1))}
-              aria-label="Mazāk cilvēku"
-              className="mono text-[18px] text-muted hover:text-ink transition-colors w-6 h-6 flex items-center justify-center"
-            >
-              −
-            </button>
-            <input
-              type="number"
+          <div className="flex items-baseline gap-3">
+            <Stepper
+              value={employees}
               min={1}
               max={150}
               step={1}
-              value={employees}
-              onChange={(e) => {
-                const v = Number(e.target.value);
-                if (Number.isFinite(v)) onChange(clamp(v));
-              }}
-              className="mono tabular-nums text-[2rem] md:text-[2.5rem] leading-none tracking-[-0.03em] text-ink bg-transparent border-0 focus:outline-none w-[4ch] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+              suffix="cilvēki"
+              ariaLabel="Cilvēku skaits"
+              size="md"
+              onChange={onChange}
             />
-            <span className="mono text-[12px] text-muted">cilvēki</span>
-            <button
-              type="button"
-              onClick={() => onChange(clamp(employees + 1))}
-              aria-label="Vairāk cilvēku"
-              className="mono text-[18px] text-muted hover:text-ink transition-colors w-6 h-6 flex items-center justify-center ml-1"
-            >
-              +
-            </button>
           </div>
         </div>
 
-        <div className="flex items-baseline gap-3 md:text-right md:ml-auto" aria-live="polite">
-          <span aria-hidden className="hidden md:inline-block h-px w-8 bg-ink/25" />
-          <span className="mono text-[11px] uppercase tracking-[0.18em] text-muted">
-            Tev der
+        <div
+          className="flex flex-col md:items-end gap-1.5 md:ml-auto"
+          aria-live="polite"
+        >
+          <span className="flex items-center gap-2.5 mono text-[12px] md:text-[13px] uppercase tracking-[0.18em] text-muted">
+            <span aria-hidden className="inline-block h-px w-5 bg-ink/30" />
+            <span>Tev der</span>
           </span>
-          <span className="text-[18px] md:text-[20px] tracking-tight text-ink font-medium">
-            {recommended.name}
-          </span>
-          <span className="mono text-[13px] tabular-nums text-muted">
-            €{recommended.price}/mēn
-          </span>
+          <div className="flex items-baseline gap-3 flex-wrap">
+            <span className="text-[22px] md:text-[26px] tracking-tight text-ink font-medium">
+              {recommended.name}
+            </span>
+            <span aria-hidden className="mono text-[14px] text-muted">→</span>
+            <span className="mono text-[15px] tabular-nums text-ink">
+              €{recommended.price}
+              <span className="text-muted">/mēn</span>
+            </span>
+          </div>
         </div>
       </div>
     </div>
