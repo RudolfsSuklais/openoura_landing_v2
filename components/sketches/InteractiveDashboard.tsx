@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Activity,
   BarChart3,
@@ -15,6 +15,7 @@ import {
   FolderOpen,
   Layers,
   LogOut,
+  Menu,
   Package,
   PackageOpen,
   Receipt,
@@ -141,8 +142,34 @@ function flatLabel(page: Page): string {
 export function InteractiveDashboard() {
   const [active, setActive] = useState<Page>("projekti");
   const [hintDismissed, setHintDismissed] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const dismissHint = () => setHintDismissed(true);
+
+  const handleSelect = (page: Page) => {
+    setActive(page);
+    setSidebarOpen(false);
+  };
+
+  // Lock background scroll while the mobile sidebar is open.
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [sidebarOpen]);
+
+  // Close on Escape.
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSidebarOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [sidebarOpen]);
 
   return (
     <div className="relative w-full max-w-[1400px] mx-auto">
@@ -150,9 +177,23 @@ export function InteractiveDashboard() {
         className="relative w-full bg-white text-gray-900 rounded-2xl border border-gray-200 shadow-xl overflow-hidden"
         style={{ fontFamily: INTER_STACK }}
       >
-        <TopBar />
-        <div className="flex">
-          <Sidebar active={active} onSelect={setActive} />
+        <TopBar onOpenMenu={() => setSidebarOpen(true)} />
+        <div className="relative flex">
+          {/* Mobile backdrop */}
+          {sidebarOpen && (
+            <button
+              type="button"
+              aria-label="Aizvērt izvēlni"
+              onClick={() => setSidebarOpen(false)}
+              className="md:hidden absolute inset-0 bg-gray-900/40 z-10 transition-opacity duration-200"
+            />
+          )}
+          <Sidebar
+            active={active}
+            onSelect={handleSelect}
+            mobileOpen={sidebarOpen}
+            onCloseMobile={() => setSidebarOpen(false)}
+          />
           {renderPage(active, dismissHint)}
         </div>
         <ToastNotifications />
@@ -208,10 +249,18 @@ function renderPage(page: Page, onDismissHint: () => void) {
 /* ──────────────────────────────────────────────────────────
    TOP BAR
    ────────────────────────────────────────────────────────── */
-function TopBar() {
+function TopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
   return (
     <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4">
       <div className="flex items-center gap-3 min-w-0">
+        <button
+          type="button"
+          aria-label="Atvērt izvēlni"
+          onClick={onOpenMenu}
+          className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-50"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         <button
           aria-label="Aizvērt"
           className="hidden md:flex w-9 h-9 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-50"
@@ -280,15 +329,36 @@ function TopBar() {
 function Sidebar({
   active,
   onSelect,
+  mobileOpen,
+  onCloseMobile,
 }: {
   active: Page;
   onSelect: (p: Page) => void;
+  mobileOpen: boolean;
+  onCloseMobile: () => void;
 }) {
   return (
     <aside
-      className="hidden md:flex flex-col w-[240px] shrink-0 border-r border-gray-200 px-3 py-4"
+      aria-label="Moduļu izvēlne"
+      className={`flex flex-col w-[260px] md:w-[240px] shrink-0 border-r border-gray-200 px-3 py-4 overflow-y-auto z-20 transition-transform duration-300 ease-out
+        absolute md:relative inset-y-0 left-0
+        md:translate-x-0 ${mobileOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full md:translate-x-0"}`}
       style={{ background: "#F9FAFB" }}
     >
+      <div className="md:hidden flex items-center justify-between pb-3 mb-2 border-b border-gray-200">
+        <span className="px-2 text-[11px] font-semibold tracking-[0.05em] uppercase text-gray-400">
+          Moduļi
+        </span>
+        <button
+          type="button"
+          aria-label="Aizvērt izvēlni"
+          onClick={onCloseMobile}
+          className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
       {SIDEBAR.map((section, i) => (
         <div key={section.label} className={i === 0 ? "" : "mt-4"}>
           <div className="px-2 mb-1.5 text-[11px] font-semibold tracking-[0.05em] uppercase text-gray-400">
