@@ -3,6 +3,8 @@ import { Instrument_Serif, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
+import { MetaPixel } from "@/components/MetaPixel";
+import { MetaPixelPageView } from "@/components/analytics/MetaPixelPageView";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { OrganizationSchema, SoftwareApplicationSchema } from "@/components/JsonLd";
@@ -99,6 +101,17 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  ...(process.env.META_DOMAIN_VERIFICATION
+    ? {
+        verification: {
+          other: {
+            "facebook-domain-verification": [
+              process.env.META_DOMAIN_VERIFICATION,
+            ],
+          },
+        },
+      }
+    : {}),
 };
 
 export default function RootLayout({
@@ -115,6 +128,8 @@ export default function RootLayout({
         </a>
         <OrganizationSchema />
         <SoftwareApplicationSchema />
+        <MetaPixel />
+        <MetaPixelPageView />
         <PostHogProvider>
           <PageViewTracker />
           {children}

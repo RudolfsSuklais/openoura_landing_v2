@@ -10,6 +10,7 @@ import {
   trackFormStarted,
   trackFormSubmitted,
 } from "@/lib/analytics";
+import { trackLead } from "@/lib/meta-pixel";
 import { useSectionView } from "./analytics/useSectionView";
 
 type FormState = {
@@ -117,6 +118,23 @@ export function FinalCTA() {
           has_phone: form.phone.trim().length > 0,
           source_cta: sourceCta,
         });
+
+        const [firstName, ...rest] = form.name.trim().split(/\s+/);
+        trackLead(
+          {
+            content_name: "demo_request",
+            ...(projectedSavings
+              ? { value: projectedSavings, currency: "EUR" }
+              : {}),
+          },
+          {
+            email: form.email,
+            phone: form.phone.trim() || undefined,
+            first_name: firstName,
+            last_name: rest.length ? rest.join(" ") : undefined,
+          },
+        );
+
         setSubmitted(form);
         return;
       }

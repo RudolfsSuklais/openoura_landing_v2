@@ -6,6 +6,12 @@ import { Stepper } from "./ui/Stepper";
 import { CurrentSetupMatrix } from "./CurrentSetupMatrix";
 import { trackCtaClick, type CtaLocation } from "@/lib/analytics";
 import { useSectionView } from "./analytics/useSectionView";
+import { useTrackViewContentOnVisible } from "@/lib/meta-pixel";
+
+const VIEW_CONTENT_PARAMS = {
+  content_name: "pricing",
+  content_category: "pricing_section",
+} as const;
 
 type PlanKey = "starter" | "professional" | "enterprise";
 
@@ -88,6 +94,7 @@ function recommendFor(employees: number): PlanKey {
 
 export function Pricing() {
   const sectionRef = useSectionView<HTMLElement>("viewed_pricing");
+  useTrackViewContentOnVisible(sectionRef, VIEW_CONTENT_PARAMS);
   const [employees, setEmployees] = useState(10);
   const recommended = recommendFor(employees);
   const recommendedPlan = PLANS.find((p) => p.key === recommended)!;
