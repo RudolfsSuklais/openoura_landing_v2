@@ -8,6 +8,7 @@ import { Pricing } from "@/components/Pricing";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Solution } from "@/components/Solution";
 import { OrderJourney } from "@/components/OrderJourney";
+import { Founder } from "@/components/Founder";
 
 
 export default function Page() {
@@ -21,6 +22,7 @@ export default function Page() {
       <Numbers />
       <WhoItsFor />
       <SocialProof />
+      <Founder />
       <Pricing />
       <FinalCTA />
     </main>

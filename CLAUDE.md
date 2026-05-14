@@ -249,7 +249,8 @@ not all at once. Mix and match per section.
 7. **Snake_case section numbers** — every major section numbered 
    in eyebrow: 01 (Manifests / Hero), 02 (Problēma), 03 (Risinājums), 
    04 (Skaitļi / Numbers), 05 (Brutāls godīgums / WhoItsFor), 
-   06 (Klients / SocialProof), 07 (Cenas / Pricing), 08 (Sākums / FinalCTA)
+   06 (Klients / SocialProof), 07 (Autors / Founder), 
+   08 (Cenas / Pricing), 09 (Sākums / FinalCTA)
 
 ═══════════════════════════════════════════════════════════════════
 ## 10. ANIMATION RULES
@@ -298,8 +299,9 @@ Solution.tsx        # Section 03 — Risinājums
 Numbers.tsx         # Section 04 — Skaitļi
 WhoItsFor.tsx       # Section 05 — Brutāls godīgums
 SocialProof.tsx     # Section 06 — Klients
-Pricing.tsx         # Section 07 — Cenas
-FinalCTA.tsx        # Section 08 — Sākums (contact + demo form)
+Founder.tsx         # Section 07 — Autors (Rudolfs)
+Pricing.tsx         # Section 08 — Cenas
+FinalCTA.tsx        # Section 09 — Sākums (contact + demo form)
 FadeUp.tsx          # Animation wrapper
 ProductSketch.tsx   # Reusable product mockup
 WhatsAppButton.tsx  # Floating CTA (hides over #demo)

@@ -8,8 +8,8 @@ import { trackCtaClick } from "@/lib/analytics";
 const LINKS = [
   { href: "#problema", num: "02", label: "Problēma" },
   { href: "#risinajums", num: "03", label: "Risinājums" },
-  { href: "#cenas", num: "07", label: "Cenas" },
-  { href: "#demo", num: "08", label: "Kontakti" },
+  { href: "#cenas", num: "08", label: "Cenas" },
+  { href: "#demo", num: "09", label: "Kontakti" },
 ];
 
 export function Nav() {

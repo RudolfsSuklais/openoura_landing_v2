@@ -111,7 +111,7 @@ export function Pricing() {
         <FadeUp>
           <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted mb-12 flex items-center gap-3">
             <span className="inline-block h-px w-8 bg-ink/40" />
-            Cenas · 07
+            Cenas · 08
           </div>
         </FadeUp>
 
