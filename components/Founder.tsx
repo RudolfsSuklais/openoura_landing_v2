@@ -25,11 +25,13 @@ export function Founder() {
             <FadeUp>
               <h2
                 id="founder-heading"
-                className="font-medium leading-[0.92] tracking-[-0.035em] text-ink text-[2.5rem] sm:text-[3.25rem] md:text-[4.25rem] lg:text-[5.25rem] max-w-[14ch]"
+                className="font-medium leading-[0.92] tracking-[-0.035em] text-ink text-[2.5rem] sm:text-[3.25rem] md:text-[4.25rem] lg:text-[5.25rem] max-w-[18ch]"
               >
-                Aiz OpenOura stāv{" "}
-                <span className="serif-italic gradient-text">viens</span>{" "}
-                cilvēks
+                <span className="block">
+                  Aiz OpenOura stāv{" "}
+                  <span className="serif-italic gradient-text">komanda</span>.
+                </span>
+                <span className="block">Tās priekšgalā — es.</span>
               </h2>
             </FadeUp>
 
@@ -54,10 +56,10 @@ export function Founder() {
 
               <FadeUp delay={0.2}>
                 <p className="text-ink">
-                  Šī nav korporatīva platforma. Viens cilvēks, viens produkts,
-                  tieša saruna — tu runā ar to,{" "}
-                  <span className="serif-italic">kurš būvē sistēmu</span>,
-                  nevis ar atbalsta čatbotu.
+                  Šī nav korporatīva platforma. Maza komanda, viens produkts,
+                  tieša saruna — tu runā ar{" "}
+                  <span className="serif-italic">dibinātāju</span>, nevis ar
+                  atbalsta čatbotu.
                 </p>
               </FadeUp>
             </div>
@@ -72,7 +74,7 @@ export function Founder() {
               >
                 <Image
                   src="/openoura_founder.jpeg"
-                  alt="Rudolfs Šuklais — OpenOura dibinātājs un izstrādātājs"
+                  alt="Rudolfs Šuklais — OpenOura dibinātājs"
                   fill
                   sizes="(min-width: 1024px) 38vw, 100vw"
                   className="object-cover"
@@ -112,7 +114,7 @@ export function Founder() {
 
             <FadeUp delay={0.3}>
               <p className="mt-6 mono text-[11px] uppercase tracking-[0.18em] text-muted leading-relaxed">
-                Atbildu 4 stundu laikā · bez asistentiem
+                Atbildu personīgi · 4 stundu laikā
               </p>
             </FadeUp>
           </div>

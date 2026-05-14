@@ -208,7 +208,10 @@ Use ONCE per section maximum.
 - Tiers: €69 / €199 / €499
 - Database tables: 45
 - Codebase: ~62k lines PHP/JS/CSS across ~211 files
-- Built solo by 1 developer
+- Built by a small team led by Rudolfs (founder). Never state
+  exact team size or imply solo development on the landing page —
+  the public narrative is "small team, you talk to the founder
+  directly".
 
 ### Placeholder data in product mockups (use consistently)
 - Date: 11.05.2026
