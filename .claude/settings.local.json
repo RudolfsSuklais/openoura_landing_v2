@@ -28,7 +28,8 @@
       "Bash(curl -s http://localhost:3005/)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3006/)",
       "Bash(curl -s http://localhost:3006/)",
-      "PowerShell(npx tsc --noEmit 2>&1)"
+      "PowerShell(npx tsc --noEmit 2>&1)",
+      "PowerShell(npx next lint --dir components/DemoPill.tsx --dir app/layout.tsx --dir lib/analytics.ts)"
     ]
   }
 }

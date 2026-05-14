@@ -13,7 +13,11 @@ export function OrganizationSchema() {
       addressLocality: "Liepāja",
       addressCountry: "LV",
     },
-    sameAs: [],
+    sameAs: [
+      "https://www.instagram.com/openoura/",
+      "https://www.facebook.com/profile.php?id=61589528827191",
+      "https://www.linkedin.com/in/r%C5%ABdolfs-%C5%A1uklais-9b4666337",
+    ],
     contactPoint: {
       "@type": "ContactPoint",
       email: "rudolfs@openoura.com",

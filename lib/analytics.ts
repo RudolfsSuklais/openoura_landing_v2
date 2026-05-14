@@ -11,7 +11,8 @@ export type CtaLocation =
   | "pricing_cehs"
   | "pricing_razotne"
   | "journey_pabeigts"
-  | "sticky_mobile";
+  | "sticky_mobile"
+  | "scroll_pill";
 
 export function trackCtaClick(location: CtaLocation) {
   if (typeof window === "undefined") return;

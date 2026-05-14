@@ -46,6 +46,7 @@ import { InstrumentiPage } from "./pages/InstrumentiPage";
 import { ComingSoonPage } from "./pages/ComingSoonPage";
 import { ToastNotifications } from "./ToastNotifications";
 import { ParskatiHint } from "./ParskatiHint";
+import { SidebarHint } from "./SidebarHint";
 
 type Page =
   | "projekti"
@@ -164,12 +165,20 @@ export function InteractiveDashboard() {
   const [active, setActive] = useState<Page>("projekti");
   const [hintDismissed, setHintDismissed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarHintDismissed, setSidebarHintDismissed] = useState(false);
 
   const dismissHint = () => setHintDismissed(true);
+  const dismissSidebarHint = () => setSidebarHintDismissed(true);
 
   const handleSelect = (page: Page) => {
     setActive(page);
     setSidebarOpen(false);
+    setSidebarHintDismissed(true);
+  };
+
+  const handleOpenMobileMenu = () => {
+    setSidebarOpen(true);
+    setSidebarHintDismissed(true);
   };
 
   // Listen for external requests to switch the active page (e.g. Solution
@@ -214,7 +223,7 @@ export function InteractiveDashboard() {
         className="relative w-full bg-white text-gray-900 rounded-2xl border border-gray-200 shadow-xl overflow-hidden"
         style={{ fontFamily: INTER_STACK }}
       >
-        <TopBar onOpenMenu={() => setSidebarOpen(true)} />
+        <TopBar onOpenMenu={handleOpenMobileMenu} />
         <div className="relative flex">
           {/* Mobile backdrop */}
           {sidebarOpen && (
@@ -237,6 +246,9 @@ export function InteractiveDashboard() {
       </div>
       {active === "parskati" && !hintDismissed && (
         <ParskatiHint onDismiss={dismissHint} />
+      )}
+      {!sidebarHintDismissed && (
+        <SidebarHint onDismiss={dismissSidebarHint} />
       )}
     </div>
   );

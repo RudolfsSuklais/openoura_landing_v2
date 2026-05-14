@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Plus, Search, TrendingUp } from "lucide-react";
 import { INTER_STACK, MONO_STACK } from "./sketches/shared";
 
@@ -47,20 +47,37 @@ const EXCEL_ROWS: Array<{
   { n: 10, a: "", b: "anna sūta jaunu", c: "(WhatsApp)", d: "—", e: "—", muted: true },
 ];
 
+const INITIAL_POSITION = 50;
+
 export function BeforeAfterSlider() {
-  const [position, setPosition] = useState(50);
+  // ariaPosition feeds the screen-reader value only — drag motion bypasses
+  // React state entirely and writes directly to a CSS custom property so the
+  // Excel/OpenOura subtrees don't re-render on every pointermove.
+  const [ariaPosition, setAriaPosition] = useState(INITIAL_POSITION);
   const [hintVisible, setHintVisible] = useState(false);
+  const [hasNudged, setHasNudged] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const positionRef = useRef(INITIAL_POSITION);
+  const rectRef = useRef<DOMRect | null>(null);
   const draggingRef = useRef(false);
   const hintTimerRef = useRef<number | null>(null);
 
-  const updateFromClientX = useCallback((clientX: number) => {
+  const setPos = useCallback((pct: number) => {
+    const clamped = Math.min(100, Math.max(0, pct));
+    positionRef.current = clamped;
     const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const pct = ((clientX - rect.left) / rect.width) * 100;
-    setPosition(Math.min(100, Math.max(0, pct)));
+    if (el) el.style.setProperty("--pos", `${clamped}%`);
   }, []);
+
+  const updateFromClientX = useCallback(
+    (clientX: number) => {
+      const rect = rectRef.current;
+      if (!rect) return;
+      const pct = ((clientX - rect.left) / rect.width) * 100;
+      setPos(pct);
+    },
+    [setPos],
+  );
 
   const dismissHint = useCallback(() => {
     setHintVisible(false);
@@ -72,6 +89,7 @@ export function BeforeAfterSlider() {
 
   const onPointerDown = (e: React.PointerEvent) => {
     draggingRef.current = true;
+    rectRef.current = (e.currentTarget as HTMLElement).getBoundingClientRect();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     updateFromClientX(e.clientX);
     dismissHint();
@@ -84,26 +102,24 @@ export function BeforeAfterSlider() {
 
   const onPointerUp = (e: React.PointerEvent) => {
     draggingRef.current = false;
+    rectRef.current = null;
     (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    setAriaPosition(Math.round(positionRef.current));
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") {
+    let next: number | null = null;
+    if (e.key === "ArrowLeft") next = Math.max(0, positionRef.current - 5);
+    else if (e.key === "ArrowRight") next = Math.min(100, positionRef.current + 5);
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = 100;
+    if (next !== null) {
       e.preventDefault();
-      setPosition((p) => Math.max(0, p - 5));
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      setPosition((p) => Math.min(100, p + 5));
-    } else if (e.key === "Home") {
-      e.preventDefault();
-      setPosition(0);
-    } else if (e.key === "End") {
-      e.preventDefault();
-      setPosition(100);
+      setPos(next);
+      setAriaPosition(Math.round(next));
     }
   };
 
-  const [hasNudged, setHasNudged] = useState(false);
   useEffect(() => {
     if (hasNudged) return;
     if (typeof IntersectionObserver === "undefined") return;
@@ -116,11 +132,10 @@ export function BeforeAfterSlider() {
         if (entry.isIntersecting && !hasNudged) {
           setHasNudged(true);
           if (!reduceMotion) {
-            setTimeout(() => setPosition(65), 700);
-            setTimeout(() => setPosition(35), 1500);
-            setTimeout(() => setPosition(50), 2300);
+            window.setTimeout(() => setPos(65), 700);
+            window.setTimeout(() => setPos(35), 1500);
+            window.setTimeout(() => setPos(50), 2300);
           }
-          // Show the "← Velc →" hint label and auto-hide after 3.5s
           setHintVisible(true);
           hintTimerRef.current = window.setTimeout(() => {
             setHintVisible(false);
@@ -135,13 +150,14 @@ export function BeforeAfterSlider() {
       observer.disconnect();
       if (hintTimerRef.current) window.clearTimeout(hintTimerRef.current);
     };
-  }, [hasNudged]);
+  }, [hasNudged, setPos]);
 
   return (
     <div className="relative">
       <div
         ref={containerRef}
-        className="relative w-full aspect-[4/5] sm:aspect-[16/11] md:aspect-[16/10] overflow-hidden rounded-md border hairline bg-paper select-none cursor-ew-resize"
+        className="relative w-full aspect-[4/5] sm:aspect-[16/11] md:aspect-[16/10] overflow-hidden rounded-md border hairline bg-paper select-none cursor-ew-resize touch-pan-y"
+        style={{ "--pos": `${INITIAL_POSITION}%` } as React.CSSProperties}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -150,8 +166,8 @@ export function BeforeAfterSlider() {
         aria-label="Pirms un pēc — Excel salīdzinājumā ar OpenOura"
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-valuenow={Math.round(position)}
-        aria-valuetext={`${Math.round(position)}% Excel rāda kreisajā pusē, pārējais — OpenOura`}
+        aria-valuenow={ariaPosition}
+        aria-valuetext={`${ariaPosition}% Excel rāda kreisajā pusē, pārējais — OpenOura`}
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
@@ -161,7 +177,7 @@ export function BeforeAfterSlider() {
 
         <div
           className="absolute inset-0"
-          style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+          style={{ clipPath: "inset(0 calc(100% - var(--pos)) 0 0)" }}
         >
           <ExcelSide />
         </div>
@@ -169,16 +185,15 @@ export function BeforeAfterSlider() {
         <div
           aria-hidden
           className="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none"
-          style={{ left: `${position}%` }}
+          style={{ left: "var(--pos)" }}
         />
 
-        {/* Floating "← Velc →" hint, fades out on first interaction or 3.5s */}
         <div
           aria-hidden
           className={`absolute top-[calc(50%-44px)] -translate-x-1/2 mono text-[11px] uppercase tracking-[0.16em] bg-ink text-paper px-2.5 py-1 rounded-full shadow-lg transition-opacity duration-500 pointer-events-none ${
             hintVisible ? "opacity-100" : "opacity-0"
           }`}
-          style={{ left: `${position}%` }}
+          style={{ left: "var(--pos)" }}
         >
           ← Velc →
         </div>
@@ -188,14 +203,14 @@ export function BeforeAfterSlider() {
           aria-hidden
           tabIndex={-1}
           className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-paper border-2 border-ink shadow-[0_8px_24px_rgba(10,10,10,0.3)] flex items-center justify-center gap-[3px] transition-transform duration-150 hover:scale-105 active:scale-95"
-          style={{ left: `${position}%` }}
+          style={{ left: "var(--pos)" }}
         >
           <span aria-hidden className="block w-[2px] h-4 md:h-5 bg-ink rounded-full" />
           <span aria-hidden className="block w-[2px] h-4 md:h-5 bg-ink rounded-full" />
           <span aria-hidden className="block w-[2px] h-4 md:h-5 bg-ink rounded-full" />
         </button>
 
-        <div className="absolute top-3 left-3 md:top-4 md:left-5 mono text-[10px] uppercase tracking-[0.22em] text-ink/80 bg-paper/85 backdrop-blur-sm rounded-[2px] px-2 py-1 pointer-events-none z-10">
+        <div className="absolute top-3 left-3 md:top-4 md:left-5 mono text-[10px] uppercase tracking-[0.22em] text-ink/80 bg-paper/85 sm:backdrop-blur-sm rounded-[2px] px-2 py-1 pointer-events-none z-10">
           Pirms · Excel
         </div>
         <div className="absolute top-3 right-3 md:top-4 md:right-5 mono text-[10px] uppercase tracking-[0.22em] bg-ink/90 text-paper rounded-[2px] px-2 py-1 pointer-events-none z-10">
@@ -219,7 +234,7 @@ export function BeforeAfterSlider() {
 /* ───────────────────────────────────────────────────────────
    EXCEL SIDE — chaotic spreadsheet aesthetic
    ─────────────────────────────────────────────────────────── */
-function ExcelSide() {
+const ExcelSide = memo(function ExcelSide() {
   return (
     <div className="absolute inset-0 bg-[#FDFDF7] flex flex-col">
       <div className="flex items-center gap-2 px-3 py-1.5 border-b border-[#D4D4CB] bg-[#F3F2EC] text-[11px] text-[#3A3A35]">
@@ -264,7 +279,7 @@ function ExcelSide() {
       </div>
     </div>
   );
-}
+});
 
 function ExcelRow({
   n,
@@ -308,7 +323,7 @@ function ExcelRow({
 /* ───────────────────────────────────────────────────────────
    OPENOURA SIDE — mirror of the real Projekti page
    ─────────────────────────────────────────────────────────── */
-function OpenOuraSide() {
+const OpenOuraSide = memo(function OpenOuraSide() {
   return (
     <div
       className="absolute inset-0 bg-white text-gray-900 overflow-hidden flex flex-col"
@@ -327,7 +342,7 @@ function OpenOuraSide() {
       </div>
     </div>
   );
-}
+});
 
 function ChromeTopBar() {
   return (

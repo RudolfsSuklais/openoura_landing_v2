@@ -8,7 +8,7 @@ const NOT_FOR = [
 ];
 
 const FOR = [
-  "tev ir 1–250 cilvēki un ražošana, kas vairs neiekļaujas Excelā",
+  "tev ir 1–200 cilvēki un ražošana, kas vairs neiekļaujas Excelā",
   "tu reizi nedēļā saki “mums vajadzētu kaut ko ar to izdarīt”",
   "tavs grāmatvedis nēsā papīrus pa biroju, un tev nepatīk to skatīties",
   "tu gribi sākt šomēnes, nevis ieplānot ieviešanu uz rudeni",

@@ -7,6 +7,7 @@ import { MetaPixel } from "@/components/MetaPixel";
 import { MetaPixelPageView } from "@/components/analytics/MetaPixelPageView";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
+import { DemoPill } from "@/components/DemoPill";
 import { OrganizationSchema, SoftwareApplicationSchema } from "@/components/JsonLd";
 
 const instrumentSerif = Instrument_Serif({
@@ -136,6 +137,7 @@ export default function RootLayout({
         </PostHogProvider>
         <WhatsAppButton />
         <StickyMobileCTA />
+        <DemoPill />
         <div className="grain" aria-hidden />
       </body>
     </html>

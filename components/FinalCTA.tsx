@@ -418,7 +418,7 @@ export function FinalCTA() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:gap-10 text-[13px]">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8 md:gap-10 text-[13px]">
               <div>
                 <div className="mono text-[10px] uppercase tracking-[0.18em] text-muted mb-3">
                   Produkts
@@ -463,6 +463,31 @@ export function FinalCTA() {
                     <a className="hover:text-ash" href="tel:+37120510502">
                       +371 20 510 502
                     </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <div className="mono text-[10px] uppercase tracking-[0.18em] text-muted mb-3">
+                  Sekot
+                </div>
+                <ul className="space-y-2">
+                  <li>
+                    <SocialLink
+                      href="https://www.instagram.com/openoura/"
+                      label="Instagram"
+                    />
+                  </li>
+                  <li>
+                    <SocialLink
+                      href="https://www.facebook.com/profile.php?id=61589528827191"
+                      label="Facebook"
+                    />
+                  </li>
+                  <li>
+                    <SocialLink
+                      href="https://www.linkedin.com/in/r%C5%ABdolfs-%C5%A1uklais-9b4666337"
+                      label="LinkedIn"
+                    />
                   </li>
                 </ul>
               </div>
@@ -635,5 +660,28 @@ function SuccessState({
         — Rudolfs
       </div>
     </div>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────
+   SOCIAL LINK — footer "Sekot" column
+   ─────────────────────────────────────────────────────────── */
+
+function SocialLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group inline-flex items-baseline gap-1.5 hover:text-ash"
+    >
+      <span>{label}</span>
+      <span
+        aria-hidden
+        className="mono text-[10px] text-muted/60 group-hover:text-ash group-hover:translate-x-0.5 transition-all"
+      >
+        ↗
+      </span>
+    </a>
   );
 }
