@@ -154,7 +154,7 @@ export function CurrentSetupMatrix() {
             </div>
             <div className="mono tabular-nums text-[1.75rem] md:text-[2.25rem] leading-none tracking-[-0.02em] text-ink">
               €{OPENOURA_PRICE}
-              <span className="mono text-[14px] text-muted">/mēn</span>
+              <span className="mono text-[14px] text-muted">/mēn · bez PVN</span>
             </div>
             {monthlyEur > OPENOURA_PRICE && (
               <div className="mt-2 mono text-[11px] uppercase tracking-[0.16em] text-ink">

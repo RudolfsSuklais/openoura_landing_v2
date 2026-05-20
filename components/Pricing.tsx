@@ -161,7 +161,7 @@ export function Pricing() {
                 OpenOura
               </div>
               <div className="mono text-[14px] text-ink md:text-right">
-                no €69/mēnesī  ·  šodien  ·  bez konsultantiem
+                no €69/mēnesī · bez PVN  ·  šodien  ·  bez konsultantiem
               </div>
             </div>
           </div>
@@ -210,7 +210,7 @@ export function Pricing() {
           <div className="mt-24 md:mt-32">
             <div className="border-t hairline" />
             <div className="mono text-[11px] uppercase tracking-[0.18em] text-muted text-center pt-6 leading-relaxed">
-              Bez gada līgumiem  ·  Atcel jebkurā brīdī  ·  25 min demo · WhatsApp vai e-pasts
+              Visas cenas bez PVN  ·  Bez gada līgumiem  ·  Atcel jebkurā brīdī  ·  25 min demo · WhatsApp vai e-pasts
             </div>
           </div>
         </FadeUp>
@@ -259,7 +259,9 @@ function PlanColumn({ plan, isRecommended }: { plan: Plan; isRecommended: boolea
         <span className={`text-[3.5rem] leading-none tracking-tight text-ink ${priceWeight}`}>
           €{plan.price}
         </span>
-        <span className="mono text-[14px] text-muted">/ mēn.</span>
+        <span className="mono text-[14px] text-muted">
+          / mēn. <span className="text-muted/60">· bez PVN</span>
+        </span>
       </div>
 
       <div className="mt-4 text-[14px] text-ash">{plan.audience}</div>
@@ -351,7 +353,7 @@ function PlanRecommender({
             <span aria-hidden className="mono text-[14px] text-muted">→</span>
             <span className="mono text-[15px] tabular-nums text-ink">
               €{recommended.price}
-              <span className="text-muted">/mēn</span>
+              <span className="text-muted">/mēn · bez PVN</span>
             </span>
           </div>
         </div>

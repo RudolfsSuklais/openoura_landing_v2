@@ -12,7 +12,7 @@ const STATS = [
   {
     value: "€69",
     label: "sākuma cena mēnesī",
-    foot: "bez ieviešanas, bez setup fee",
+    foot: "bez PVN, bez ieviešanas, bez setup fee",
     span: "lg:col-span-5",
     align: "right",
   },
