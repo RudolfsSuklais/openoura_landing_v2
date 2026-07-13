@@ -1,353 +1,252 @@
 # OpenOura Landing Page — Design System & Guidelines
 
-This is the design and code reference for openoura.com landing page.
+This is the design and code reference for landing.openoura.com.
 Every new section, component, or change MUST follow this document.
-If anything in this file conflicts with a user request, ask before deviating.
+If anything here conflicts with a user request, ask before deviating.
+
+> **Source of truth:** The approved prototype
+> `Claude Cowork/openoura-landing.html` defines the visual system. This
+> Next.js app is a 1:1 port of it. When in doubt, match the prototype.
 
 ═══════════════════════════════════════════════════════════════════
 ## 1. THE BIG IDEA
 ═══════════════════════════════════════════════════════════════════
 
-OpenOura is a simple manufacturing management tool (mini ERP) for 
-small Latvian manufacturers. Pricing starts at €69/month.
+OpenOura is a manufacturing management tool (mini ERP) for Latvian
+manufacturers — from a handful of people up to a few hundred employees.
+Pricing starts at €69/month. Do NOT position it as "for small
+manufacturers", and do NOT claim onboarding is free or instant — setup
+scope depends on company size.
 
-The landing page communicates ONE truth:
-"Excel ir tavs sliktākais darbinieks ražošanā."
-(Excel is your worst employee in manufacturing.)
+The landing page communicates ONE promise:
+"Visa tava ražotne vienā ekrānā." (Your whole factory on one screen.)
+Sub-promise: see who works on what, what it costs, and what each
+project earns — to the cent, in real time, **without Excel**.
 
-Every section reinforces this. We are anti-Excel, not pro-features.
-We sell *clarity*, not software.
-
-Audience: Latvian manufacturing business owners, 35-55 years old, 
-5-30 employees, currently using Excel + paper + WhatsApp to run 
-production. They visit the page from mobile on Monday morning with 
-coffee. They give us 5 seconds.
+Audience: Latvian manufacturing business owners, 35–55, running
+production teams that range from a few people up to ~300 employees,
+currently on Excel + paper + WhatsApp. Mobile-first,
+Monday-morning-with-coffee readers. We get ~5 seconds.
 
 ═══════════════════════════════════════════════════════════════════
 ## 2. DESIGN PHILOSOPHY
 ═══════════════════════════════════════════════════════════════════
 
-This site is EDITORIAL. Think New York Times opinion piece meets 
-Linear.app product page. Not a SaaS template.
+This is a **modern, polished product landing page** — think Linear /
+Vercel / Framer template quality, warmed up with real product mockups
+and one violet→teal accent. Confident, clean, motion-rich but tasteful.
 
 Core principles:
-- Typography is the hero element, not illustrations
-- Whitespace is content, not waste
-- Hard-left alignment everywhere, NOT centered (except where 
-  explicitly justified)
-- Asymmetric grids (60/40, 70/30) — never perfect 50/50
-- One bold idea per section, never feature-soup
-- Real Latvian copy, real Latvian numbers, real Latvian customer 
-  names — NEVER placeholder Lorem Ipsum or fake testimonials
-- Confident, not friendly. We don't beg. We assert.
+- **Centered, generous layout.** Section heads are centered; content
+  sits in a 1140px `.wrap`. (This is intentional — not hard-left.)
+- Real product UI mockups are the hero visual — code-built, 1:1 with the
+  actual OpenOura app (the `.ooapp` dashboard especially).
+- One accent gradient: **violet → teal**, used for highlights, bars,
+  avatars, the progress bar.
+- Motion is a feature: blobs, headline reveal, tab rotation, scroll
+  reveal, parallax — but always behind `prefers-reduced-motion`.
+- Light **and** dark mode are both first-class (theme toggle in nav).
+- Real Latvian copy, real numbers, real customer (Finestra). Never
+  Lorem Ipsum or fake testimonials.
 
 What this site is NOT:
 - ❌ Generic shadcn template
-- ❌ Notion / Linear clone with rainbow gradients
-- ❌ 3D floating blobs, glassmorphism, animated mesh
-- ❌ "Trusted by 1000+ companies" placeholder logos
-- ❌ Emoji-driven feature cards
-- ❌ "Transform your business" buzzword copy
+- ❌ Rainbow / multi-hue gradients (only violet→teal)
+- ❌ Glassmorphism, 3D blobs as the *whole* background
+- ❌ "Trusted by 1000+ companies" placeholder logo walls
+- ❌ Buzzword copy ("transform", "revolutionize", "synergy")
 
 ═══════════════════════════════════════════════════════════════════
-## 3. VISUAL REFERENCES
+## 3. TYPOGRAPHY SYSTEM
 ═══════════════════════════════════════════════════════════════════
 
-Study and emulate (in this order of importance):
-1. linear.app — massive type, hard-left, restraint
-2. vercel.com — spacing rhythm, navbar simplicity
-3. stripe.com — copy confidence, no buzzwords
-4. arc.net — color restraint, one accent
-5. pitch.com — typography as the hero
-6. resend.com — minimalist with character
-7. cron.com / Notion Calendar — section transitions
+### Fonts (via `next/font/google`, CSS variables in `app/layout.tsx`)
+- **Hanken Grotesk** → default UI, body, headlines (`--font-hanken`,
+  exposed as `--font`)
+- **Inter** → the real-app mockup only (`.ooapp`, `--font-inter`), to
+  match the actual product UI
+- **JetBrains Mono** → numbers, eyebrows, timers, URLs, technical
+  labels (`--font-jetbrains`, exposed as `--mono`)
 
-Do NOT reference:
-- AWS, Salesforce, SAP landing pages
-- Any "enterprise" SaaS aesthetic
-- Generic Tailwind UI templates
+### Scale
+- Hero h1 (`#heroTitle`): `clamp(42px, 7.4vw, 90px)`, weight 800,
+  `letter-spacing: -.045em`, `line-height: .98`
+- Section h2 (`.sec-head h2`): `clamp(32px, 4.6vw, 52px)`
+- Statement h2 (`.stmt h2`): `clamp(34px, 5.4vw, 64px)`
+- Spot h3: `clamp(27px, 3.6vw, 42px)`
+- Headings: weight 800, tight tracking. No trailing period in the hero
+  except the deliberate "ekrānā." full stop.
+
+### Signature move
+The last hero word (`.hl`) gets a **violet→teal underline swipe**
+(`::before`, animates in). One statement word gets `.hl2` (solid
+violet). Use these sparingly — one accent per section.
 
 ═══════════════════════════════════════════════════════════════════
-## 4. TYPOGRAPHY SYSTEM
+## 4. COLOR SYSTEM (CSS tokens in `app/globals.css`)
 ═══════════════════════════════════════════════════════════════════
 
-### Fonts
-- **Display & Italic accents:** Instrument Serif
-  - Used for emphasis words inside headlines (italic)
-  - Used for editorial annotations
-- **UI, body, headlines:** Geist Sans
-  - Default for everything
-- **Numbers, stats, eyebrows, metadata:** Geist Mono
-  - Used for: "MANIFESTS · 01", timestamps, stats, "90s", 
-    section numbers, technical labels
+### Light (`:root`)
+- `--bg` #ffffff · `--bg-soft` #f7f7f9 · `--card` #ffffff
+- `--ink` #0d0d12 · `--ink-soft` #56565f · `--ink-mute` #8b8b95
+- `--line` #ececf1 · `--line-2` #e0e0e7
+- `--violet` #7c3aed · `--teal` #14b8a6 · `--coral` #ff6b4a ·
+  `--pink` #ec4899 · `--ok` #0d9488
 
-### Scale (h1 — section heroes)
-- Hero h1: text-[4rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem]
-- Section h2: text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[6.5rem]
-- Sub-section h3: text-[2rem] md:text-[3rem]
-- Always: leading-[0.9], tracking-[-0.04em]
+### Dark (`html[data-theme="dark"]`)
+- `--bg` #0a0a0f · `--bg-soft` #101017 · `--card` #14141c
+- `--ink` #f3f3f7 · `--ink-soft` #a8a8b3 · `--ink-mute` #6c6c78
+- `--violet` #a78bfa · `--teal` #2dd4bf (brighter for contrast)
 
-### The Signature Move
-Inside any major headline, ONE word is set in 
-`serif-italic gradient-text` — Instrument Serif italic + 
-violet→pink 135deg gradient. This is the brand's visual hook. 
-Use ONCE per section maximum.
+### The accent gradient
+`linear-gradient(135deg, #7c3aed, #14b8a6)` (violet→teal). Used for:
+underline swipe, progress bar, `.bar i` fills, avatars, checkmark
+circles, tstat numbers. **Never** introduce a third hue.
 
 ### Rules
-- Headlines do NOT end with a period (manifesto style)
-- Body text: 17px mobile, 20px desktop, leading-[1.45]
-- Eyebrow tags ("MANIFESTS · 01"): 11px Geist Mono uppercase, 
-  tracking-[0.18em], with hairline before text
-- Subheads: max-w-[36ch] md:max-w-[42ch] lg:max-w-[46ch]
+- Always use the tokens, never hard-code hex in components (exception:
+  the `.ooapp` mockup, which is intentionally locked to the real app's
+  light palette regardless of theme).
+- Both themes must be tested for every change.
 
 ═══════════════════════════════════════════════════════════════════
-## 5. COLOR SYSTEM
+## 5. LAYOUT & SPACING
 ═══════════════════════════════════════════════════════════════════
 
-### Palette
-- `--paper` (background): #FAFAF7 — warm off-white, NEVER pure white
-- `--ink` (primary text): #0A0A0A — near-black, NEVER pure black
-- `--ash` (secondary text): #4B4B4B — body copy
-- `--muted` (tertiary text): #6B6B6B — meta, captions
-- `--hairline`: rgba(10,10,10,0.08) — subtle borders
-- `--marker` (handwritten red): #D93838 — annotations only
-
-### Accent
-- Gradient: `linear-gradient(135deg, #8B5CF6 → #EC4899)`
-- Class: `gradient-text` (foreground), `gradient-bg` (background)
-- Used ONCE per section maximum, for the signature italic word
-
-### Dark sections (rare, used for emphasis)
-- Background: #0A0A0A
-- Text: #FAFAF7
-- Used only for: testimonial quote, final CTA, key statistical 
-  reveals — NEVER for default sections
-
-### Rules
-- NO multi-color gradients ever
-- NO rainbow effects
-- Status badges: soft-amber (#FEF3C7 bg + #92400E text), 
-  soft-blue (#DBEAFE + #1E40AF), soft-gray (#F3F4F6 + #4B5563)
+- Container: `.wrap` = `max-width: 1140px`, `padding: 0 28px` (18px on
+  mobile).
+- Section rhythm: `section.block { padding: 96px 0 }`.
+- Section head: centered, `max-width: 640px`, with a `.kicker` pill
+  eyebrow (violet on violet-soft).
+- Product tour uses asymmetric `.spot` grids (1.02fr / 1fr), alternating
+  sides via `.spot.rev`.
+- Breakpoints collapse at 900px and 680px (see `globals.css` media
+  queries). Everything must work at 375px.
 
 ═══════════════════════════════════════════════════════════════════
-## 6. LAYOUT RULES
+## 6. SECTIONS (order = page order)
 ═══════════════════════════════════════════════════════════════════
 
-### Spacing
-- Section vertical padding: pt-24 md:pt-32 lg:pt-40, pb-24 md:pb-32
-- Sections separated by min 200px on desktop
-- Container: max-w-page (1440px), px-6 md:px-10
-- Content blocks within sections: never wider than 1000px
-
-### Grid
-- DEFAULT: hard-left alignment, no centering
-- Two-column splits: 60/40 or 70/30, never 50/50
-- Feature lists: vertical stacks with generous spacing, 
-  NOT 3-column grids of equal cards
-- One exception: "Numbers that matter" section MAY be centered 
-  for stats emphasis
-
-### Section transitions
-- Each section starts with a small Geist Mono eyebrow:
-  "PROBLĒMA · 02", "RISINĀJUMS · 03", etc.
-- Eyebrow includes hairline divider before text
-- Numbers continue from hero (which is "MANIFESTS · 01")
-
-═══════════════════════════════════════════════════════════════════
-## 7. COPY RULES
-═══════════════════════════════════════════════════════════════════
-
-### Language
-- Primary: Latvian (formal "tu" form, not "jūs" — we speak 
-  directly to one business owner)
-- Secondary: English (toggle in nav, separate routes)
-- NEVER use both languages in the same line
-
-### Tone
-- Confident, specific, blunt
-- We assume the reader is smart and busy
-- Short sentences. Sometimes very short. Like this.
-- We name names (Finestra, Koks & Co), we cite numbers (€69, 8h, 47)
-- Anti-buzzword: ban these words entirely:
-  ❌ "transform", "revolutionize", "empower", "synergy", 
-     "digitalizācija" (overused), "inovācija", "platforma"
-- Preferred:
-  ✅ "vienkārša", "skaidri", "redz", "vada", "taupa", "zina"
-
-### Headlines
-- One bold claim per section
-- No questions in major headlines (they feel weak)
-- Use italic + gradient on ONE emphasis word
-
-### CTAs
-- Primary: "Pieprasi demo" (black pill, white text)
-- Secondary: "Skaties video" with 90s timer hint
-- Final section: "Sāc šomēnes" or "Pieraksties sarunai"
-- NEVER: "Learn more", "Get started", "Sign up free"
+1. **Nav** (`Nav.tsx`) — sticky, blur, logo wordmark, centered links,
+   theme toggle, "Pieslēgties" → app, "Sākt bez maksas" → #cenas,
+   mobile menu.
+2. **Hero** (`Hero.tsx`) — badge, headline reveal, sub, CTAs, 4-tab
+   rotating product mockup (`#tabs`/`#panels`/`#mock`) + floating bob
+   cards + blobs.
+3. **Statement** (`Statement.tsx`) — "Beidz minēt. Sāc redzēt." + chips.
+4. **Product tour** (`ProductTour.tsx`) — 3 spotlights: Kanban board,
+   tablet timer device, profit report.
+5. **Project detail** (`ProjectDetail.tsx`) — the 1:1 `.ooapp`
+   real-time monitoring dashboard.
+6. **Trust** (`Trust.tsx`) — Finestra quote + 4 stat tiles.
+7. **Assurance** (`Assurance.tsx`) — 4-item guarantee strip.
+8. **Pricing** (`Pricing.tsx`) — 3 plans €69 / €199 / €499, "pop" =
+   Professional. Buttons open the demo modal.
+9. **FAQ** (`Faq.tsx`) — accordion, 6 items.
+10. **Contact** (`Contact.tsx`) — founder card, demo button + tel +
+    WhatsApp.
+11. **Final CTA** (`FinalCta.tsx`) — dark rounded card, "Atstāj Excel
+    aiz muguras".
+12. **Footer** (`Footer.tsx`) — brand, link columns, visual LV/EN/RU
+    toggle.
+- **FloatCta** (fixed demo button), **DemoModal**, **SiteInteractions**
+  render once at the page root.
 
 ═══════════════════════════════════════════════════════════════════
-## 8. CONTENT INVENTORY (real, verified)
+## 7. ANIMATION / INTERACTIVITY
 ═══════════════════════════════════════════════════════════════════
 
-### Real customers (use for social proof)
-- Finestra Solution (Liepāja) — window/door manufacturer, primary 
-  reference customer (legal entity: SIA Finestra)
-- [Add more as Rudolfs gets permissions]
+All JS lives in `components/site/SiteInteractions.tsx` (a single client
+component that wires the server-rendered markup). Behaviours:
+- Theme toggle (persisted to `localStorage` `oo-theme`; no-flash init
+  script in `layout.tsx`)
+- Sticky-nav shadow on scroll · scroll progress bar
+- Hero headline word reveal · tab auto-rotation (3.4s) + click
+- Scroll reveal (`.reveal` → `.in`) + animated bar/chart fills
+- Hero blob + mockup parallax, magnetic primary buttons (fine pointer +
+  motion allowed only)
+- FAQ accordion (max-height) · live tablet timer · footer lang toggle
+- Mobile menu open/close
 
-### Real product modules
-- Production scheduler with TV Display mode
-- BOM & warehouse
-- AI invoice parsing (Anthropic Haiku)
-- Forma 2 (Pabeigto darbu akts)
-- Employee time tracking
-- CMR documents
-- Estimates & profitability
-
-### Real numbers (verified by Rudolfs)
-- Starting price: €69/month
-- Tiers: €69 / €199 / €499
-- Database tables: 45
-- Codebase: ~62k lines PHP/JS/CSS across ~211 files
-- Built by a small team led by Rudolfs (founder). Never state
-  exact team size or imply solo development on the landing page —
-  the public narrative is "small team, you talk to the founder
-  directly".
-
-### Placeholder data in product mockups (use consistently)
-- Date: 11.05.2026
-- Time: 08:30 (morning shift start)
-- Active orders: 23
-- Sample orders:
-  • #2614 — Logu rāmji, ozols → SIA Finestra → 13.05 → RAŽO
-  • #2613 — Durvju komplekts → Koks & Co → 14.05 → TĀME
-  • #2612 — Galda virsmas → Ozols SIA → 15.05 → RAŽO
-  • #2611 — Plauktu sistēma → Mājīgi.lv → 17.05 → GAIDA
+**Rules:** respect `prefers-reduced-motion` (the CSS media query kills
+animations; JS parallax is also gated). No bouncy springs beyond the
+existing tab pill easing. Keep all listeners/timers cleaned up on unmount.
 
 ═══════════════════════════════════════════════════════════════════
-## 9. SIGNATURE DESIGN MOVES (use across sections)
+## 8. COPY RULES
 ═══════════════════════════════════════════════════════════════════
 
-These are the brand's recurring visual elements. Use them — but 
-not all at once. Mix and match per section.
-
-1. **The italic-gradient word** — ONE emphasis word per section, 
-   set in Instrument Serif italic + violet→pink gradient
-
-2. **Eyebrow with hairline** — small Geist Mono tag above every 
-   section title: `── MANIFESTS · 01`
-
-3. **Marker annotations** — red handwritten serif-italic notes 
-   pointing to specific UI elements with hand-drawn SVG arrows. 
-   Use sparingly, only where they add information.
-
-4. **Slight rotations** — UI mockups tilted 0.6° to 2° for 
-   "set on a desk" feel. Annotations rotated -3°.
-
-5. **Film grain overlay** — 6% opacity SVG noise covering 
-   the entire page (already in layout.tsx)
-
-6. **Hairline dividers** — 1px borders at rgba(10,10,10,0.08), 
-   used between major content blocks
-
-7. **Snake_case section numbers** — every major section numbered 
-   in eyebrow: 01 (Manifests / Hero), 02 (Problēma), 03 (Risinājums), 
-   04 (Skaitļi / Numbers), 05 (Brutāls godīgums / WhoItsFor), 
-   06 (Klients / SocialProof), 07 (Autors / Founder), 
-   08 (Cenas / Pricing), 09 (Sākums / FinalCTA)
+- Latvian, informal "tu". Confident, specific, blunt. Short sentences.
+- Ban buzzwords: "transform", "revolucionē", "sinerģija", "platforma".
+- Prefer: "vienkārši", "skaidri", "redz", "vada", "taupa", "zina".
+- CTAs: "Pieprasi demo", "Izmēģināt par brīvu", "Sākt bez maksas". Never
+  "Learn more" / "Get started".
+- **Never change copy, prices (€69/€199/€499), or contact details
+  without explicit permission.**
 
 ═══════════════════════════════════════════════════════════════════
-## 10. ANIMATION RULES
+## 9. CONTENT INVENTORY (real, verified)
 ═══════════════════════════════════════════════════════════════════
 
-Use `framer-motion` for ONE animation pattern only:
-
-```tsx
-
-  
-
-```
-
-- Fade up 20px on scroll-into-view
-- Stagger delays: 0, 0.05, 0.15, 0.25, 0.4 (manifesto rhythm)
-- Duration: 0.6s, easing: cubic-bezier(0.16, 1, 0.3, 1)
-
-NO bouncy springs. NO horizontal slides. NO parallax. 
-NO scroll-triggered counters. NO marquee unless explicitly 
-requested. The animation should be invisible — you notice the 
-content, not the motion.
+- Real customer: **SIA Finestra** (Liepāja) — windows/doors. Quote:
+  8h/week saved, 47 orders in one view, 22 Excel files → 0.
+- Founder: **Rūdolfs Šuklais**. Public narrative: "small team, you talk
+  to the founder directly." Never state exact team size / solo.
+- Contacts (do not change): tel +371 20 510 502 · wa.me/37120510502 ·
+  E-pasts (footer) ruudisrudolfs@gmail.com. The demo form backend sends
+  to rudolfs@openoura.com (server-side, not shown).
+- Prices: €69 (Starter) / €199 (Professional, popular) / €499
+  (Enterprise), all "bez PVN".
+- Mockup placeholder data (keep consistent): orders #2611–#2621,
+  projects P-226…P-235, workers Jānis Bērziņš, Anna Kalniņa, etc.
 
 ═══════════════════════════════════════════════════════════════════
-## 11. TECHNICAL STACK
+## 10. TECHNICAL STACK
 ═══════════════════════════════════════════════════════════════════
 
-- Next.js 15 App Router
-- TypeScript strict mode
-- Tailwind CSS (config has custom colors above)
-- shadcn/ui components allowed but customize aggressively — 
-  default shadcn looks like every other site
-- framer-motion for FadeUp only
-- next/font for Instrument Serif, Geist Sans, Geist Mono
-- Hosting: Vercel
+- Next.js 15 App Router · TypeScript strict · CSS in `app/globals.css`
+  (design-token / class based — **not** Tailwind utilities; Tailwind
+  preflight is intentionally not loaded)
+- `next/font` for Hanken Grotesk / Inter / JetBrains Mono
+- Demo form → real Server Action `app/actions/demo-request.ts` (Resend
+  + rate limit + confirmation email), triggered from any `[data-demo]`
+  element via `DemoModal.tsx`
+- Analytics preserved: PostHog + Meta Pixel/CAPI (`lib/`, `components/
+  analytics/`, `MetaPixel.tsx`). Keep these wired.
+- Language toggle (LV/EN/RU) is **visual only** — no i18n routing yet.
+- Assets in `public/`: `openoura-logo.png` (wordmark),
+  `openoura_founder.jpeg`, `finestra_logo.png`.
 
 ### File structure
+```
 app/
-layout.tsx          # Film grain overlay lives here
-page.tsx            # Composes sections
-globals.css         # Custom CSS vars + gradient classes
-components/
-Nav.tsx             # Sticky header + mobile fullscreen menu
-Hero.tsx            # Section 01 — Manifests
-Problem.tsx         # Section 02 — Problēma
-Solution.tsx        # Section 03 — Risinājums
-Numbers.tsx         # Section 04 — Skaitļi
-WhoItsFor.tsx       # Section 05 — Brutāls godīgums
-SocialProof.tsx     # Section 06 — Klients
-Founder.tsx         # Section 07 — Autors (Rudolfs)
-Pricing.tsx         # Section 08 — Cenas
-FinalCTA.tsx        # Section 09 — Sākums (contact + demo form)
-FadeUp.tsx          # Animation wrapper
-ProductSketch.tsx   # Reusable product mockup
-WhatsAppButton.tsx  # Floating CTA (hides over #demo)
-JsonLd.tsx          # Organization + SoftwareApplication schemas
+  layout.tsx          # fonts, theme init, progress+noise, analytics
+  page.tsx            # composes sections
+  globals.css         # full design system (ported prototype CSS)
+  actions/demo-request.ts
+components/site/
+  Nav · Hero · Statement · ProductTour · ProjectDetail · Trust ·
+  Assurance · Pricing · Faq · Contact · FinalCta · Footer · FloatCta
+  DemoModal.tsx       # real demo form (client)
+  SiteInteractions.tsx# all client-side behaviour (client)
+  icons.tsx           # shared inline SVGs
+components/            # analytics + JsonLd (kept). Legacy editorial
+                      # components (Problem/Solution/…) remain on disk
+                      # but are NOT used by page.tsx.
+```
 
 ═══════════════════════════════════════════════════════════════════
-## 12. WHEN BUILDING A NEW SECTION
+## 11. WHEN BUILDING / CHANGING A SECTION — CHECKLIST
 ═══════════════════════════════════════════════════════════════════
 
-Checklist before writing code:
-
-1. [ ] What is the ONE idea this section communicates?
-2. [ ] What word in the headline gets the italic-gradient treatment?
-3. [ ] What's the eyebrow tag? (e.g. "PROBLĒMA · 02")
-4. [ ] Is the layout hard-left aligned? Asymmetric grid?
-5. [ ] Are real numbers / real names used, not placeholders?
-6. [ ] Is the CTA copy specific, not generic?
-7. [ ] Does typography do the heavy lifting, or am I leaning on 
-       illustrations/icons?
-8. [ ] Does this section look INTENTIONALLY DIFFERENT from a 
-       generic SaaS section, or am I defaulting to shadcn?
-9. [ ] Mobile breakpoint tested at 375px?
-10. [ ] Does this section reinforce "Excel ir sliktākais 
-        darbinieks", or is it just decorative?
-
-If any answer is unclear, ASK before writing code.
-
-═══════════════════════════════════════════════════════════════════
-## 13. ANTI-PATTERNS — NEVER DO
-═══════════════════════════════════════════════════════════════════
-
-❌ 3-column grid of identical feature cards with emoji icons
-❌ "Trusted by [logo wall]" without real customer names
-❌ Gradient backgrounds covering large areas
-❌ Animated mesh / blob backgrounds
-❌ Glassmorphism cards
-❌ Centered layouts as the default
-❌ Sentence-case CTAs ("Learn more")
-❌ Stock illustration humans pointing at screens
-❌ "✨ AI-powered" copy anywhere
-❌ Generic testimonial slider with avatar circles
-❌ "Pricing toggle" annual/monthly with 20% off badge
-❌ FAQ accordion at bottom of page
+1. [ ] Does it match the prototype `openoura-landing.html`?
+2. [ ] Uses CSS tokens (no hard-coded hex outside `.ooapp`)?
+3. [ ] Works in light AND dark mode?
+4. [ ] Motion gated by `prefers-reduced-motion`; listeners cleaned up?
+5. [ ] Real numbers / names, not placeholders?
+6. [ ] Demo CTAs use `[data-demo]` (+ `data-cta` for analytics)?
+7. [ ] Tested at 375px, tablet, desktop?
+8. [ ] Copy/prices/contacts unchanged (unless permission given)?
 
 ═══════════════════════════════════════════════════════════════════
 END OF GUIDELINES

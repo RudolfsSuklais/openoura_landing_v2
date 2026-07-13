@@ -1,42 +1,41 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Geist, Geist_Mono } from "next/font/google";
+import { Hanken_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 import { MetaPixel } from "@/components/MetaPixel";
 import { MetaPixelPageView } from "@/components/analytics/MetaPixelPageView";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { StickyMobileCTA } from "@/components/StickyMobileCTA";
-import { DemoPill } from "@/components/DemoPill";
 import { OrganizationSchema, SoftwareApplicationSchema } from "@/components/JsonLd";
 
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  style: ["normal", "italic"],
+const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-instrument-serif",
+  variable: "--font-hanken",
   display: "swap",
   adjustFontFallback: false,
 });
 
-const geistSans = Geist({
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-geist-sans",
+  variable: "--font-inter",
   display: "swap",
   adjustFontFallback: false,
 });
 
-const geistMono = Geist_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-geist-mono",
+  variable: "--font-jetbrains",
   display: "swap",
   adjustFontFallback: false,
 });
+
+// Runs before paint to avoid a light→dark flash on reload. Honours a
+// ?theme=light|dark override (handy for deep-linking / QA).
+const THEME_INIT = `(function(){try{var u=new URLSearchParams(location.search).get('theme');var s=localStorage.getItem('oo-theme');var sys=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var t=(u==='dark'||u==='light')?u:(s||sys);document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://openoura.com"),
   title: {
-    default: "OpenOura — Ražošanas pārvaldības programma",
+    default: "OpenOura · Ražošanas pārvaldības programma",
     template: "%s | OpenOura",
   },
   description:
@@ -67,7 +66,7 @@ export const metadata: Metadata = {
     locale: "lv_LV",
     url: "https://openoura.com",
     siteName: "OpenOura",
-    title: "OpenOura — Excel ir tavs sliktākais darbinieks",
+    title: "OpenOura · Visa tava ražotne vienā ekrānā",
     description:
       "Vienkārša ražošanas vadība Latvijas mazajiem ražotājiem. Sākot no €69/mēnesī.",
     images: [
@@ -75,13 +74,13 @@ export const metadata: Metadata = {
         url: "/og-card.png",
         width: 1200,
         height: 630,
-        alt: "OpenOura — Ražošanas pārvaldības programma",
+        alt: "OpenOura · Ražošanas pārvaldības programma",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "OpenOura — Excel ir tavs sliktākais darbinieks",
+    title: "OpenOura · Visa tava ražotne vienā ekrānā",
     description:
       "Vienkārša ražošanas vadība Latvijas mazajiem ražotājiem. Sākot no €69/mēnesī.",
     images: ["/og-card.png"],
@@ -119,14 +118,18 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="lv" className={`${instrumentSerif.variable} ${geistSans.variable} ${geistMono.variable}`}>
-      <body className="font-sans bg-paper text-ink antialiased">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-violet focus:px-4 focus:py-2 focus:text-white focus:shadow-lg"
-        >
+    <html
+      lang="lv"
+      suppressHydrationWarning
+      className={`${hankenGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+    >
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        <a href="#top" className="skip-link">
           Pāriet uz saturu
         </a>
+        <div className="progress-bar" id="progress" />
+        <div className="noise" aria-hidden />
         <OrganizationSchema />
         <SoftwareApplicationSchema />
         <MetaPixel />
@@ -135,10 +138,6 @@ export default function RootLayout({
           <PageViewTracker />
           {children}
         </PostHogProvider>
-        <WhatsAppButton />
-        <StickyMobileCTA />
-        <DemoPill />
-        <div className="grain" aria-hidden />
       </body>
     </html>
   );

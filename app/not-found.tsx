@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "404 — Lapa nav atrasta",
+  title: "404 · Lapa nav atrasta",
   robots: { index: false, follow: true },
 };
 
