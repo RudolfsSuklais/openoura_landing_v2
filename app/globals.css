@@ -814,6 +814,7 @@ header.nav.scrolled .nav-inner { height: 66px; }
 @media (max-width: 760px) { .calc { grid-template-columns: 1fr; padding: 28px 24px; } }
 /* 34. cookie banner */
 .cookie { position: fixed; left: 24px; bottom: 84px; z-index: 118; max-width: 360px; background: var(--card); border: 1px solid var(--line-2); border-radius: 16px; box-shadow: var(--shadow-lg); padding: 18px 20px; font-size: 13.5px; color: var(--ink-soft); }
+@media (max-width: 440px) { .cookie { left: 16px; right: 16px; max-width: none; } }
 .cookie p { margin-bottom: 12px; line-height: 1.5; }
 .cookie a { color: var(--violet); text-decoration: underline; }
 .cookie-btns { display: flex; gap: 10px; }
